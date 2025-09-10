@@ -9,7 +9,10 @@ Menurut sebuah studi, tingkat pembatalan reservasi hotel bisa mencapai 20% secar
 Oleh karena itu, kemampuan untuk memprediksi kemungkinan seorang pelanggan membatalkan reservasi menjadi sangat krusial. Dengan model prediksi yang akurat, manajer hotel dapat membuat keputusan yang lebih cerdas dan berbasis data untuk mengoptimalkan tingkat hunian, menyesuaikan kebijakan pemesanan, dan pada akhirnya memaksimalkan pendapatan. Proyek ini bertujuan untuk membangun model *machine learning* yang mampu mengklasifikasikan status pemesanan hotel (dibatalkan atau tidak) berdasarkan data historis reservasi.
 
 **Referensi:**
-[1] K. Kraja, "Factors affecting cancelation of hotel reservation," *Academic Journal of Interdisciplinary Studies*, vol. 9, no. 1, p. 16, 2020. [Online]. Tersedia: [https://www.richtmann.org/journal/index.php/ajis/article/view/11130](https://www.richtmann.org/journal/index.php/ajis/article/view/11130).
+
+[1] Rahmawati et al. (2024), "Develompent of Machine Learning Model to Predict Hotel Room Reservation Cancellations," *Jurnal Teknologi Informasi dan Terapan*, Vol. 11 No. 2 (2024): December. Tersedia: [https://publikasi.polije.ac.id/jtit/article/view/5440](https://publikasi.polije.ac.id/jtit/article/view/5440).
+
+[2] Prasetya et al. (2024), "Stacking Machine Learning Model for Predict Hotel Booking Cancellations," *Jurnal Matematika, Statistika dan Komputasi*, Vol. 20 No. 3 (2024): May 2024. Tersedia: [https://journal.unhas.ac.id/index.php/jmsk/article/view/32619](https://journal.unhas.ac.id/index.php/jmsk/article/view/32619).
 
 ---
 
