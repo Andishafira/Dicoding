@@ -145,16 +145,18 @@ Metrik evaluasi yang digunakan harus sesuai dengan konteks masalah. Dalam kasus 
 
 ### Metrik Evaluasi
 
-- **Akurasi**: Proporsi prediksi yang benar dari total prediksi.
-  $$
-  \text{Akurasi} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}
-  $$
-- **F1-Score**: Rata-rata harmonik dari presisi dan recall. Metrik ini sangat baik digunakan ketika terdapat ketidakseimbangan kelas atau ketika biaya *false positive* dan *false negative* perlu diseimbangkan.
-  $$
-  \text{F1-Score} = 2 \times \frac{\text{Presisi} \times \text{Recall}}{\text{Presisi} + \text{Recall}}
-  $$
-    - **Presisi**: Dari semua yang diprediksi 'Tidak Batal', berapa persen yang benar-benar tidak batal.
-    - **Recall**: Dari semua yang seharusnya 'Tidak Batal', berapa persen yang berhasil diprediksi dengan benar.
+* **Akurasi**: Proporsi prediksi yang benar dari total prediksi.
+    <p align="center">
+      <img src="URL_atau_path_ke_gambar_rumus_akurasi.png" width="350">
+    </p>
+
+* **F1-Score**: Rata-rata harmonik dari presisi dan recall. Metrik ini sangat baik digunakan ketika terdapat ketidakseimbangan kelas atau ketika biaya *false positive* dan *false negative* perlu diseimbangkan.
+    <p align="center">
+      <img src="URL_atau_path_ke_gambar_rumus_f1_score.png" width="350">
+    </p>
+
+    * **Presisi**: Dari semua yang diprediksi 'Tidak Batal', berapa persen yang benar-benar tidak batal.
+    * **Recall**: Dari semua yang seharusnya 'Tidak Batal', berapa persen yang berhasil diprediksi dengan benar.
 
 Dalam konteks ini, **F1-Score** dianggap sebagai metrik utama karena memberikan gambaran yang lebih seimbang tentang performa model dalam mengidentifikasi kedua kelas.
 
