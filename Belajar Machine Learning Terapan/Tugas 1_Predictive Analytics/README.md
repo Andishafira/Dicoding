@@ -75,7 +75,7 @@ Berikut adalah penjelasan untuk setiap variabel (fitur) dalam dataset:
 - **booking_status**: Variabel target. Bernilai 'Canceled' jika dibatalkan, dan 'Not_Canceled' jika tidak.
 
 ### Exploratory Data Analysis (EDA)
-![Visualisasi Data](https://raw.githubusercontent.com/Andishafira/Dicoding/main/Belajar%20Machine%20Learning%20Terapan/Tugas%201/Visualisasi%20Data.png)
+![Visualisasi Data](https://raw.githubusercontent.com/Andishafira/Dicoding/main/Belajar%20Machine%20Learning%20Terapan/Tugas%201_Predictive%20Analytics/Visualisasi%20Data.png)
 
 Analisis data eksploratif dilakukan untuk mendapatkan wawasan awal dari data. Berdasarkan visualisasi yang telah dilakukan:
 
