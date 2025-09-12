@@ -45,10 +45,10 @@ film menggunakan dataset **MovieLens 100k**. Sistem rekomendasi yang
 dikembangkan bertujuan untuk mempersonalisasi pengalaman pengguna dengan
 memberikan rekomendasi film yang relevan, akurat, dan menarik.
 
-**Mengapa proyek ini penting?**\
+**Mengapa proyek ini penting?**
 - Platform berbasis konten (seperti Netflix, Disney+, atau Spotify untuk
 musik) telah membuktikan bahwa sistem rekomendasi dapat meningkatkan
-engagement hingga 60--70% dari konsumsi pengguna.\
+engagement hingga 60--70% dari konsumsi pengguna.
 - Rekomendasi yang tepat sasaran tidak hanya meningkatkan kepuasan
 pengguna, tetapi juga berkontribusi pada retensi pelanggan jangka
 panjang.
@@ -67,9 +67,9 @@ Management Information Systems. (https://dl.acm.org/doi/10.1145/2843948)
 ### Problem Statements
 
 1.  Bagaimana membangun sistem rekomendasi yang mampu memberikan
-    rekomendasi film yang relevan berdasarkan preferensi pengguna?\
+    rekomendasi film yang relevan berdasarkan preferensi pengguna?
 2.  Bagaimana meminimalkan masalah *cold-start* ketika pengguna memiliki
-    riwayat interaksi yang terbatas?\
+    riwayat interaksi yang terbatas?
 3.  Bagaimana meningkatkan akurasi prediksi rating sekaligus menjaga
     keberagaman rekomendasi?
 
@@ -79,9 +79,9 @@ Tujuan utama dari proyek ini adalah untuk membangun sebuah sistem rekomendasi fi
 
 1.  Mengembangkan sistem rekomendasi hibrida (Content-based +
     Collaborative Filtering) yang dapat menghasilkan daftar rekomendasi
-    film yang relevan.\
+    film yang relevan.
 2.  Menyediakan top-N recommendation sebagai output yang dapat
-    dievaluasi berdasarkan metrik standar.\
+    dievaluasi berdasarkan metrik standar.
 3.  Mengevaluasi performa sistem rekomendasi menggunakan metrik RMSE,
     Precision@k, dan Recall@k.
 
@@ -202,48 +202,100 @@ Tahapan data preparation yang dilakukan secara runtut:
 ## 6. Metodologi / Modeling and Result
 
 ### 6.1 Content-based Filtering
+Pendekatan Content-based Filtering merekomendasikan item dengan menganalisis atribut atau fitur intrinsiknya. Dalam konteks proyek ini, sistem merekomendasikan film berdasarkan kesamaan pada fitur utamanya, yaitu genre. Prinsip fundamentalnya adalah bahwa seorang pengguna yang menyukai suatu film akan cenderung menyukai film lain yang memiliki atribut serupa. Keunggulan utama dari metode ini adalah kemampuannya untuk menghasilkan rekomendasi yang relevan tanpa bergantung pada data historis dari pengguna lain, sehingga efektif mengatasi masalah cold-start.
 
--   **Cara kerja**: merekomendasikan film berdasarkan kesamaan genre.\
--   **Teknik**: TF-IDF Vectorizer pada `genres` → Cosine Similarity.\
--   **Parameter**: default TF-IDF, Cosine Similarity pairwise.
+**Cara Kerja dan Teknik Implementasi**
+Untuk dapat membandingkan properti antar film, data tekstual genres perlu ditransformasi menjadi representasi numerik yang dapat diproses secara komputasional. Proses ini diimplementasikan melalui dua tahapan teknis utama:
 
-**Contoh Top-5 Rekomendasi (untuk film The Matrix)**:\
-\| Rank \| Judul Film \| Genre \| Similarity \|
-\|------\|-------------------------\|------------------\|------------\|
-\| 1 \| The Matrix Reloaded \| Action\|Sci-Fi \| 0.89 \| \| 2 \| Dark
-City \| Sci-Fi\|Thriller \| 0.85 \| \| 3 \| Terminator 2 \|
-Action\|Sci-Fi \| 0.82 \| \| 4 \| Blade Runner \| Sci-Fi\|Drama \| 0.80
-\| \| 5 \| Total Recall \| Action\|Sci-Fi \| 0.78 \|
+1. **Vektorisasi Fitur Menggunakan TF-IDF**
+Teknik TF-IDF (Term Frequency-Inverse Document Frequency) diterapkan untuk mengonversi data genre menjadi vektor fitur numerik.
+- Term Frequency (TF): Mengukur frekuensi kemunculan sebuah istilah (dalam hal ini, genre) dalam sebuah dokumen (daftar genre untuk satu film).
+
+- Inverse Document Frequency (IDF): Memberikan bobot pada setiap genre berdasarkan kelangkaannya di seluruh koleksi film. Genre yang lebih jarang muncul (misalnya, "Film-Noir") akan menerima bobot yang lebih tinggi karena dianggap lebih signifikan sebagai penanda kemiripan. Sebaliknya, genre yang sangat umum (misalnya, "Drama") akan menerima bobot yang lebih rendah.
+
+Melalui proses ini, setiap film direpresentasikan sebagai sebuah vektor unik dalam ruang fitur multidimensi, di mana setiap dimensi merepresentasikan sebuah genre dengan bobot TF-IDF-nya.
+
+2. Kalkulasi Kemiripan Menggunakan Cosine Similarity
+Setelah setiap film memiliki representasi vektor, metrik Cosine Similarity digunakan untuk mengukur tingkat kesamaan di antara mereka.
+
+- Metode ini mengalkulasi kosinus sudut antara dua vektor. Skor yang dihasilkan berkisar antara 0 (tidak ada kemiripan) hingga 1 (kemiripan sempurna).
+
+- Skor yang mendekati 1 menandakan bahwa kedua film memiliki profil genre yang sangat mirip, karena vektornya memiliki orientasi yang hampir identik dalam ruang fitur.
+
+- Dengan menerapkan kalkulasi ini secara pairwise pada seluruh dataset, sebuah matriks kemiripan (similarity matrix) dihasilkan. Matriks ini berfungsi sebagai dasar untuk menemukan film-film yang paling mirip untuk setiap judul film yang ada.
+
+**Parameter dan Peran dalam Sistem Hibrida**
+
+Dalam implementasinya, model ini dibangun menggunakan parameter standar (default) yang disediakan oleh library Scikit-learn untuk TfidfVectorizer dan cosine_similarity. Peran model Content-based Filtering dalam arsitektur hibrida ini sangat strategis, yaitu untuk melakukan re-ranking terhadap kandidat rekomendasi yang dihasilkan oleh model Collaborative Filtering, sehingga memastikan bahwa rekomendasi akhir tidak hanya akurat berdasarkan pola interaksi pengguna, tetapi juga relevan secara kontekstual berdasarkan konten film.
 
 ### 6.2 Collaborative Filtering
 
--   **FastAI**: Neural Matrix Factorization.
-    -   Parameter: embedding dim=50, epochs=5, lr=5e-3.\
--   **Surprise (SVD)**:
-    -   Parameter: n_factors=100, n_epochs=20, lr_all=0.005,
-        reg_all=0.02.
+Collaborative Filtering merupakan paradigma sistem rekomendasi yang beroperasi berdasarkan prinsip kolaborasi sosial. Metode ini tidak menganalisis atribut dari item yang direkomendasikan, melainkan mengidentifikasi pola dari data interaksi historis pengguna, seperti rating, riwayat tontonan, atau pembelian.
 
-**Contoh Top-5 Rekomendasi (untuk userId=10, SVD)**:\
-\| Rank \| Judul Film \| Predicted Rating \|
-\|------\|-------------------------\|-----------------\| \| 1 \| Star
-Wars: Episode IV \| 4.9 \| \| 2 \| Raiders of the Lost Ark \| 4.8 \| \|
-3 \| The Empire Strikes Back \| 4.8 \| \| 4 \| Return of the Jedi \| 4.7
-\| \| 5 \| Indiana Jones \| 4.7 \|
+**Cara Kerja**
+
+Mekanisme fundamental dari Collaborative Filtering didasarkan pada asumsi bahwa jika seorang pengguna memiliki preferensi yang sama dengan pengguna lain di masa lalu, maka kemungkinan besar mereka akan memiliki preferensi yang sama di masa depan. Proses kerjanya dapat diuraikan sebagai berikut:
+
+1. Identifikasi Pola Interaksi: Sistem mengumpulkan dan menstrukturkan data interaksi pengguna-item ke dalam sebuah matriks utilitas (utility matrix), di mana baris merepresentasikan pengguna dan kolom merepresentasikan item.
+
+2. Pengukuran Kesamaan: Sistem mengalkulasi kesamaan (similarity) antar pengguna (pendekatan user-based) atau antar item (pendekatan item-based).
+
+3. Generasi Prediksi: Berdasarkan kesamaan tersebut, sistem memprediksi rating atau minat seorang pengguna terhadap item yang belum pernah berinteraksi dengannya. Prediksi ini dihitung dari rating yang diberikan oleh sekelompok pengguna yang memiliki selera serupa (nearest neighbors).
+
+Secara esensial, pendekatan ini memanfaatkan "kearifan kolektif" (wisdom of the crowd) untuk menghasilkan rekomendasi yang bersifat personal dan sering kali tak terduga (serendipitous), karena mampu menemukan item lintas genre atau kategori yang disukai oleh komunitas pengguna dengan profil serupa.
+
+**Teknik dan Parameter**
+Dalam proyek ini, dua implementasi canggih dari Collaborative Filtering berbasis Matrix Factorization dieksplorasi.
+1. **FastAI: Neural Matrix Factorization**
+**Teknik**: Implementasi ini menggunakan pendekatan modern di mana Matrix Factorization diintegrasikan ke dalam arsitektur jaringan saraf (neural network). Alih-alih hanya mengandalkan produk skalar (dot product) untuk mengkombinasikan vektor laten pengguna dan item, model ini melewatkannya melalui beberapa lapisan jaringan saraf. Hal ini memungkinkan model untuk menangkap hubungan yang lebih kompleks dan non-linear antara preferensi pengguna dan karakteristik item, yang sering kali gagal ditangkap oleh metode tradisional.
+
+**Parameter:**
+
+- embedding_dim=50: Mendefinisikan dimensionalitas ruang laten. Setiap pengguna dan film direpresentasikan sebagai sebuah vektor (embedding) dengan 50 fitur tersembunyi. Dimensi ini menentukan kapasitas model untuk menangkap nuansa dalam data preferensi.
+
+- epochs=5: Jumlah siklus pelatihan penuh pada keseluruhan dataset. Model akan memproses seluruh data latih sebanyak lima kali untuk mengoptimalkan bobot internalnya dan mencapai konvergensi.
+
+- lr=5e-3: Learning Rate (laju pembelajaran) sebesar 0.005. Parameter ini mengontrol magnitudo penyesuaian bobot model pada setiap iterasi pelatihan, yang sangat memengaruhi kecepatan dan stabilitas proses konvergensi.
+
+2. **Surprise (SVD): Singular Value Decomposition**
+
+**Teknik**: Pustaka Surprise menyediakan implementasi yang sangat teroptimisasi dari Singular Value Decomposition (SVD), sebuah teknik Matrix Factorization yang telah terbukti andal. Algoritma ini bekerja dengan menguraikan matriks utilitas pengguna-item menjadi tiga matriks terpisah yang merepresentasikan vektor laten pengguna, vektor laten item, dan nilai singularnya. Untuk tujuan prediksi, varian SVD yang dioptimalkan untuk data yang jarang (sparse data)—seperti data rating yang memiliki banyak nilai kosong—biasanya digunakan, sering kali diimplementasikan melalui algoritma optimisasi seperti Stochastic Gradient Descent (SGD).
+
+**Parameter:**
+
+- n_factors=100: Menentukan jumlah faktor laten yang akan diekstraksi. Dalam kasus ini, setiap pengguna dan item direpresentasikan oleh vektor dengan 100 dimensi.
+
+- n_epochs=20: Jumlah iterasi penuh yang akan dijalankan oleh algoritma pada seluruh data latih.
+
+- lr_all=0.005: Laju pembelajaran yang diterapkan pada semua parameter model selama proses optimisasi SGD.
+
+- reg_all=0.02: Koefisien regularisasi L2 yang diterapkan pada semua parameter. Regularisasi adalah teknik krusial untuk mencegah overfitting dengan memberikan pinalti pada bobot parameter yang terlalu besar, sehingga mendorong model untuk memiliki kemampuan generalisasi yang lebih baik pada data baru.
 
 ### 6.3 Hybrid Re-ranking
 
--   **Cara kerja**:
-    1.  Prediksi rating dengan Collaborative Filtering.\
-    2.  Ambil kandidat film dengan rating prediksi tertinggi.\
-    3.  Hitung similarity konten terhadap film kesukaan pengguna.\
-    4.  Gabungkan skor dengan bobot 0.6 (CF) dan 0.4 (Content-based).
+Pendekatan Hybrid Re-ranking adalah strategi yang menggabungkan output dari dua atau lebih teknik rekomendasi untuk menghasilkan daftar final yang lebih akurat dan relevan. Dalam implementasi proyek ini, sistem hibrida mengintegrasikan model Collaborative Filtering dan Content-based Filtering melalui sebuah mekanisme re-ranking berbobot. Tujuan utamanya adalah untuk memanfaatkan kekuatan penemuan pola dari Collaborative Filtering sambil menyempurnakan personalisasi menggunakan kemiripan konten.
 
-**Contoh Top-5 Rekomendasi (untuk userId=10, Hybrid)**:\
-\| Rank \| Judul Film \| Hybrid Score \|
-\|------\|-------------------------\|--------------\| \| 1 \| Star Wars:
-Episode IV \| 0.92 \| \| 2 \| Raiders of the Lost Ark \| 0.91 \| \| 3 \|
-The Empire Strikes Back \| 0.89 \| \| 4 \| Return of the Jedi \| 0.88 \|
-\| 5 \| Indiana Jones \| 0.87 \|
+**Cara kerja**:
+
+Proses Hybrid Re-ranking dieksekusi melalui serangkaian langkah sekuensial sebagai berikut:
+
+1. **Generasi Kandidat Awal dengan Collaborative Filtering**
+Langkah pertama adalah menghasilkan daftar kandidat rekomendasi. Model Collaborative Filtering (berbasis FastAI) digunakan untuk memprediksi potensi rating yang akan diberikan oleh seorang pengguna pada semua film yang belum pernah ia tonton. Tahap ini menghasilkan sebuah daftar film yang luas, diurutkan berdasarkan skor prediksi yang mencerminkan preferensi umum dari pengguna dengan selera serupa.
+
+2. **Seleksi Kandidat Film Berdasarkan Peringkat Teratas**
+Dari seluruh film yang telah diprediksi, sistem akan mengambil sekumpulan film dengan skor prediksi tertinggi sebagai kandidat utama. Film-film ini dianggap memiliki probabilitas tertinggi untuk disukai oleh pengguna berdasarkan analisis kolaboratif.
+
+3. **Kalkulasi Skor Kemiripan Konten**
+Selanjutnya, komponen Content-based diperkenalkan untuk personalisasi. Sistem terlebih dahulu mengidentifikasi satu atau beberapa film "benih" (seed movies), yaitu film-film yang telah diberi rating sangat tinggi oleh pengguna di masa lalu. Kemudian, untuk setiap film kandidat dari langkah sebelumnya, sistem mengkalkulasi skor kemiripan konten (menggunakan Cosine Similarity berbasis genre) terhadap film "benih" tersebut. Skor ini merepresentasikan seberapa relevan setiap kandidat secara tematis dengan preferensi eksplisit pengguna.
+
+4. **Kombinasi Berbobot dan Proses Re-ranking Final**
+Langkah terakhir adalah mengagregasi kedua skor menjadi satu skor hibrida final. Sebuah formula pembobotan diterapkan untuk menyeimbangkan pengaruh kedua model. Sesuai implementasi, skor dihitung sebagai berikut:
+
+Skor Hibrida = (0.6 * Skor_Prediksi_CF) + (0.4 * Skor_Kemiripan_Konten)
+
+Bobot sebesar 0.6 diberikan kepada skor Collaborative Filtering, sementara 0.4 diberikan kepada skor Content-based. Skor kemiripan konten juga diskalakan agar sepadan dengan rentang skor rating. Berdasarkan skor hibrida ini, seluruh daftar kandidat diurutkan ulang (re-ranked). Film-film dengan skor hibrida tertinggi kemudian disajikan kepada pengguna sebagai rekomendasi final.
+
+Metode ini secara efektif memastikan bahwa rekomendasi akhir tidak hanya populer di kalangan pengguna serupa, tetapi juga sangat relevan dengan selera personal pengguna yang teridentifikasi dari konten film yang ia sukai.
 
 ------------------------------------------------------------------------
 
@@ -262,25 +314,37 @@ The Empire Strikes Back \| 0.89 \| \| 4 \| Return of the Jedi \| 0.88 \|
 
 ### Hasil Evaluasi
 
--   **RMSE (SVD)**: 0.94.\
--   **Precision@10 (Hybrid)**: 0.0380.\
--   **Recall@10 (Hybrid)**: 0.0285.
+Dari data yang disajikan, terlihat bahwa kinerja sistem rekomendasi ini, yang diukur dengan metrik Precision@k dan Recall@k pada k=10, masih sangat rendah.
 
-### Analisis Hasil
+- Rata-rata Precision@10 sebesar 0.0380 menunjukkan bahwa, rata-rata, hanya sekitar 3.8% dari film yang direkomendasikan kepada pengguna adalah film yang relevan (film yang mereka sukai). Dengan kata lain, dari 10 film yang direkomendasikan, hanya sekitar 0.38 film (kurang dari satu) yang benar-benar relevan.
 
--   Model cukup akurat dalam prediksi rating (RMSE rendah).\
--   Precision & Recall rendah → indikasi masalah *cold-start*,
-    keterbatasan data, bobot hibrida belum optimal.
+- Rata-rata Recall@10 sebesar 0.0285 menunjukkan bahwa, rata-rata, sistem hanya berhasil menemukan sekitar 2.85% dari total film relevan yang disukai pengguna. Ini berarti sistem gagal menemukan sebagian besar film relevan yang ada dalam data pengguna.
+
+Meskipun model ini berhasil memberikan rekomendasi yang terlihat masuk akal secara tematis (misalnya, rekomendasi film-film aksi/sci-fi untuk Pengguna 582 dan 599, atau film kriminal untuk Pengguna 215), jumlah "hits" (film yang direkomendasikan dan juga relevan) sangat sedikit. Dari 32 pengguna yang dievaluasi, hanya 9 pengguna yang mendapatkan setidaknya satu film relevan di antara 10 rekomendasi teratas mereka.
+
+### Analisis Lebih Lanjut
+
+Hasil ini menunjukkan bahwa ada beberapa area yang perlu diperbaiki:
+
+- Keterbatasan Data: Jumlah pengguna dan film yang digunakan untuk evaluasi ini mungkin tidak cukup besar untuk memberikan gambaran yang akurat. Selain itu, sebaran data rating mungkin tidak merata, menyebabkan beberapa pengguna memiliki sedikit atau bahkan nol film relevan (seperti Pengguna 207 dan 496).
+
+- Masalah Cold-Start: Sebagian besar pengguna dalam evaluasi ini (seperti Pengguna 428, 215, 461, 197, dst.) memiliki hits nol. Ini bisa menjadi indikasi masalah cold-start, di mana model tidak memiliki cukup data riwayat rating untuk pengguna tersebut, sehingga rekomendasinya tidak akurat.
+
+- Bobot Model Hibrida: Bobot yang diberikan pada model Collaborative dan Content-based (jika ini adalah model hibrida) mungkin tidak optimal. Model mungkin terlalu condong ke salah satu sisi, sehingga gagal memanfaatkan kekuatan gabungan dari kedua pendekatan.
+
+- Definisi "Relevan": Mungkin ada masalah dalam definisi "film relevan". Jika hanya film dengan rating 4 atau 5 yang dianggap relevan, model mungkin kesulitan jika sebagian besar rating pengguna berada di angka 3.
+
+Secara keseluruhan, meskipun proyek ini berhasil membangun sebuah alur kerja rekomendasi, hasil evaluasi menunjukkan bahwa model ini belum siap untuk digunakan di lingkungan produksi. Diperlukan iterasi lebih lanjut pada model, data, dan strategi evaluasi untuk meningkatkan performa secara signifikan.
 
 ------------------------------------------------------------------------
 
 ## 8. Strategi Bisnis
 
-1.  **Personalisasi Dashboard**: rekomendasi personal di halaman utama.\
+1.  **Personalisasi Dashboard**: rekomendasi personal di halaman utama.
 2.  **Fitur "Film Serupa"**: rekomendasi berbasis konten pada halaman
-    detail film.\
+    detail film.
 3.  **Peningkatan Retensi**: notifikasi/email rekomendasi bagi pengguna
-    tidak aktif.\
+    tidak aktif.
 4.  **Segmentasi Pasar**: kampanye promosi sesuai preferensi pengguna.
 
 ------------------------------------------------------------------------
@@ -292,9 +356,9 @@ dengan alur kerja komprehensif. RMSE rendah menunjukkan model cukup
 akurat dalam memprediksi rating, namun nilai Precision@k dan Recall@k
 rendah menegaskan perlunya perbaikan.
 
-**Rekomendasi pengembangan selanjutnya**:\
-- Eksperimen bobot hibrida (A/B testing).\
-- Tambahkan fitur konten lain (aktor, sutradara, tag).\
+**Rekomendasi pengembangan selanjutnya**:
+- Eksperimen bobot hibrida (A/B testing).
+- Tambahkan fitur konten lain (aktor, sutradara, tag).
 - Eksplorasi algoritma lanjutan (misalnya SVD++, deep learning
 recommenders).
 
@@ -302,13 +366,13 @@ recommenders).
 
 ## 10. Struktur Laporan
 
--   Abstrak\
--   Pendahuluan\
--   Project Overview\
--   Business Understanding\
--   Data Understanding\
--   Data Preparation\
--   Metodologi / Modeling and Result\
--   Evaluation\
--   Strategi Bisnis\
+-   Abstrak
+-   Pendahuluan
+-   Project Overview
+-   Business Understanding
+-   Data Understanding
+-   Data Preparation
+-   Metodologi / Modeling and Result
+-   Evaluation
+-   Strategi Bisnis
 -   Kesimpulan
