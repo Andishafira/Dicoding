@@ -21,6 +21,16 @@ Original file is located at
 * Peluang Monetisasi: Durasi tontonan yang lebih lama dan tingkat kunjungan yang lebih sering membuka peluang untuk pendapatan dari iklan atau peningkatan langganan.
 
 #Import Data
+
+Mengimpor semua pustaka (libraries) Python yang dibutuhkan untuk proyek.
+
+`pandas`: Untuk memanipulasi dan menganalisis data dalam format tabel (DataFrame).
+
+`sklearn.feature_extraction.text.TfidfVectorizer`: Untuk mengubah data teks (genre film) menjadi vektor numerik menggunakan metode TF-IDF. Ini adalah inti dari model content-based.
+
+`sklearn.metrics.pairwise.cosine_similarity`: Untuk menghitung kemiripan antar film berdasarkan vektor genre mereka.
+
+`fastai.collab & fastai.tabular.all`: Pustaka tingkat tinggi yang mempermudah pembuatan model collaborative filtering dengan cepat.
 """
 
 # Import pustaka yang diperlukan
@@ -35,9 +45,21 @@ from fastai.collab import *
 from fastai.tabular.all import *
 from pathlib import Path
 
+"""Perintah ini menggunakan Git untuk mengkloning (mengunduh) sebuah repositori dari GitHub. Repositori ini berisi dataset yang akan digunakan (`movies.csv, ratings.csv`, dll.). File-file tersebut akan disalin ke lingkungan kerja notebook."""
+
+#Clone repository dari github untuk mengakses dataset yang telah diunggah di github sebelumnya
 !git clone https://github.com/Andishafira/Dicoding.git
 
-import pandas as pd
+"""Kode ini mendefinisikan lokasi (path) dari empat file CSV yang baru saja diunduh dan memuatnya ke dalam DataFrame pandas.
+
+`df_movie`: Berisi informasi film (movieId, title, genres).
+
+`df_ratings`: Berisi data rating yang diberikan pengguna ke film (userId, movieId, rating).
+
+`df_tags dan df_links`: Data tambahan yang tidak digunakan dalam model akhir di notebook ini.
+"""
+
+#Inisialisasi path dari masing masing csv
 
 df_movie_path = "/content/Dicoding/Belajar Machine Learning Terapan/Tugas 2_Sistem Rekomendasi/dataset/movies.csv"
 df_ratings_path = "/content/Dicoding/Belajar Machine Learning Terapan/Tugas 2_Sistem Rekomendasi/dataset/ratings.csv"
@@ -48,6 +70,17 @@ df_movie = pd.read_csv(df_movie_path)
 df_ratings = pd.read_csv(df_ratings_path)
 df_tags = pd.read_csv(df_tags_path)
 df_links = pd.read_csv(df_links_path)
+
+"""Kode ini digunakan untuk melakukan analisis data eksplorasi (EDA) dasar untuk memahami isi dataset.
+
+`df_movie.head() & df_ratings.head()`: Menampilkan 5 baris pertama dari tabel film dan rating untuk melihat struktur datanya.
+
+`df_movie.info() & df_ratings.info()`: Memberikan ringkasan teknis tentang DataFrame, seperti jumlah data, nama kolom, dan tipe datanya. Ini berguna untuk memeriksa apakah ada data yang hilang (missing values).
+
+`len(df_movie['genres'].unique())`: Menghitung jumlah kombinasi genre yang unik.
+
+`all_genres.value_counts().head(10)`: Memisahkan genre yang digabung dengan | (misalnya, "Adventure|Animation|Children") menjadi genre individual, lalu menghitung dan menampilkan 10 genre paling umum di seluruh dataset (Drama, Comedy, Thriller, dll.).
+"""
 
 # Menampilkan 5 baris pertama dari movies_df
 print("--- 5 baris pertama dari movies.csv ---")
@@ -80,13 +113,39 @@ print(all_genres.value_counts().head(10))
 # Gabungkan data ratings dan movies
 ratings = df_ratings.merge(df_movie)
 
+"""Tabel `df_ratings` dan `df_movie` digabungkan menjadi satu DataFrame baru bernama `ratings`. Penggabungan ini dilakukan berdasarkan kolom `movieId` yang ada di kedua tabel. Hasilnya adalah sebuah tabel yang berisi `userId, rating, title,` dan `genres` dalam satu baris, yang memudahkan proses pelatihan model."""
+
 ratings.head()
 
+#Membagi Data
 #split ratings to train df and test df (80:20)
 from sklearn.model_selection import train_test_split
 train_df, test_df = train_test_split(ratings, test_size=0.2, random_state=42)
 
-"""#Train Model"""
+"""Dataset ratings dibagi menjadi dua bagian:
+
+* **Data Latih (train_df)**: 80% dari data, digunakan untuk melatih model.
+
+* **Data Uji (test_df)**: 20% dari data, digunakan untuk mengevaluasi seberapa baik performa model pada data yang belum pernah dilihat sebelumnya.
+
+#Train Model
+
+Sel ini adalah inti dari pemodelan, di mana dua jenis sistem rekomendasi dibangun.
+
+1. **Model Collaborative Filtering** (dengan fastai):
+
+`CollabDataLoaders.from_df`: Mempersiapkan data latih ke dalam format yang dibutuhkan oleh fastai.
+
+`collab_learner`: Membuat model collaborative filtering. Model ini belajar pola dari interaksi pengguna-film secara keseluruhan.
+
+`learn.fit_one_cycle(5, 5e-3)`: Memulai proses pelatihan model selama 5 epoch (siklus). Output tabel menunjukkan bahwa loss (kesalahan) pada data validasi semakin menurun, yang menandakan model sedang belajar.
+
+2. **Model Content-Based Filtering** (dengan scikit-learn):
+
+`TfidfVectorizer`: Mengonversi kolom genres dari setiap film menjadi representasi angka (vektor). Film dengan genre serupa akan memiliki vektor yang mirip.
+
+`cosine_similarity`: Menghitung skor kemiripan (antara -1 dan 1) untuk setiap pasang film berdasarkan vektor genre mereka. Hasilnya adalah matriks cosine_sim yang menyimpan skor ini.
+"""
 
 # --- Model Collaborative Filtering (fastai) ---
 # Persiapan data loaders
@@ -123,7 +182,22 @@ tfidf_matrix = tfidf_vectorizer.fit_transform(genres_data)
 # Hitung Cosine Similarity
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
-"""##Membuat Model Hybrid"""
+"""##Membuat Model Hybrid
+
+Sel ini mendefinisikan fungsi `get_hybrid_recommendations` yang menggabungkan kekuatan kedua model sebelumnya.
+
+1. Mendapatkan Film yang Belum Ditonton: Fungsi ini mengambil `user_id` dan mencari semua film yang belum pernah ia tonton.
+
+2. Prediksi Rating (Collaborative): Model `fastai` digunakan untuk memprediksi rating yang mungkin akan diberikan pengguna pada film-film yang belum ia tonton.
+
+3. Mencari Film Favorit (Benih Content-Based): Fungsi ini mencari film dengan rating tertinggi yang pernah diberikan oleh pengguna. Film ini akan menjadi "benih" untuk mencari film lain yang genrenya mirip.
+
+4. Skor Kemiripan Genre (Content-Based): Berdasarkan film "benih" tadi, fungsi ini mengambil skor kemiripan genre dari matriks `cosine_sim` untuk semua film lainnya.
+
+5. Menghitung Skor Hibrida: Skor akhir dihitung dengan menggabungkan prediksi rating (dari model collaborative) dan skor kemiripan genre (dari model content-based) menggunakan bobot tertentu (`collaborative_weight dan content_weight`).
+
+6. Mengembalikan Top-N Rekomendasi: Fungsi mengembalikan daftar film teratas berdasarkan skor hibrida tertinggi.
+"""
 
 def get_hybrid_recommendations(user_id, num_recommendations=10, collaborative_weight=0.6, content_weight=0.4):
     """
@@ -147,7 +221,7 @@ def get_hybrid_recommendations(user_id, num_recommendations=10, collaborative_we
     all_movies_titles = df_movie['title'].tolist()
     unrated_movies = [title for title in all_movies_titles if title not in user_rated_movies]
 
-    # Pilih 100 film acak dari yang belum ditonton untuk diprediksi (untuk efisiensi)
+    # Pilih film acak dari yang belum ditonton untuk diprediksi (untuk efisiensi)
     unrated_movies_sample = pd.Series(unrated_movies).tolist()
 
     # 2. Menggunakan model Collaborative untuk memprediksi rating
@@ -200,7 +274,10 @@ def get_hybrid_recommendations(user_id, num_recommendations=10, collaborative_we
     final_recs = hybrid_recs.sort_values(by='hybrid_score', ascending=False).head(num_recommendations)
     return final_recs[['title', 'hybrid_score', 'predicted_rating', 'content_sim_score']]
 
-"""##Contoh Testing"""
+"""##Contoh Testing
+
+Kode ini menunjukkan cara menggunakan fungsi hibrida. Fungsi `get_hybrid_recommendations` dipanggil untuk pengguna dengan ID 197. Hasilnya adalah 10 film yang direkomendasikan, diurutkan berdasarkan `hybrid_score` tertinggi.
+"""
 
 # Contoh penggunaan:
 user_id_to_recommend = 197
@@ -208,7 +285,24 @@ print(f"--- Rekomendasi Hibrida untuk Pengguna {user_id_to_recommend} ---")
 recommendations = get_hybrid_recommendations(user_id_to_recommend)
 print(recommendations)
 
-"""#Evaluasi Model"""
+"""#Evaluasi Model
+
+Untuk mengukur kinerja model secara objektif, fungsi `evaluate_hybrid_recommender` dibuat.
+
+1. **Metrik** : Fungsi ini menggunakan **Precision@k** (berapa persen dari k rekomendasi yang relevan) dan **Recall@k**(berapa persen dari total film relevan yang berhasil direkomendasikan).
+
+2. **Proses** : Fungsi ini berjalan pada data uji (`test_df`). Untuk setiap pengguna sampel:
+
+    * Menentukan "film relevan" (film yang diberi rating tinggi, misalnya >= 4.0).
+
+    * Menghasilkan 10 rekomendasi teratas menggunakan fungsi hibrida.
+
+    * Membandingkan film yang direkomendasikan dengan film yang relevan untuk menghitung "hits".
+
+    * Menghitung Precision dan Recall.
+
+3. **Hasil** : Sel terakhir menjalankan evaluasi dan mencetak Rata-rata Precision@10: 0.0380 dan Rata-rata Recall@10: 0.0285.
+"""
 
 def evaluate_hybrid_recommender(model, ratings_df, test_df, k=10, min_rating=4.0):
     """
