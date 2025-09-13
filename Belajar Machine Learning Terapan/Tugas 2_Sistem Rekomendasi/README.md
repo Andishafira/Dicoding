@@ -18,7 +18,7 @@ Sistem rekomendasi adalah alat vital dalam platform digital modern, dirancang un
 
 ## 2. Project Overview
 
-Sistem rekomendasi telah menjadi komponen penting dalam berbagai platform digital, khususnya di bidang hiburan seperti layanan film dan musik. Tanpa sistem ini, pengguna kerap kesulitan menemukan konten yang relevan di antara banyaknya pilihan, yang berisiko menurunkan retensi dan kepuasan mereka.
+Sistem rekomendasi telah menjadi komponen penting dalam berbagai platform digital, khususnya di bidang hiburan seperti layanan film dan musik. Tanpa sistem ini, pengguna kerap kesulitan menemukan konten yang relevan di antara banyaknya pilihan, yang berisiko menurunkan retensi dan kepuasan mereka[1][2].
 
 Proyek ini berfokus pada pembangunan dan evaluasi sistem rekomendasi film menggunakan dataset **MovieLens 100k** untuk mempersonalisasi pengalaman pengguna dengan memberikan rekomendasi yang relevan, akurat, dan menarik.
 
@@ -27,8 +27,9 @@ Proyek ini berfokus pada pembangunan dan evaluasi sistem rekomendasi film menggu
 - Rekomendasi yang tepat sasaran tidak hanya meningkatkan kepuasan pengguna, tetapi juga berkontribusi pada retensi pelanggan jangka panjang.
 
 **Referensi Terkait**:
-- Ricci, F., Rokach, L., & Shapira, B. (2015). *Recommender Systems Handbook*. Springer. ([Tautan](https://www.researchgate.net/publication/227268858_Recommender_Systems_Handbook))
-- Gómez-Uribe, C. A., & Hunt, N. (2016). *The Netflix Recommender System: Algorithms, Business Value, and Innovation*. ACM Transactions on Management Information Systems. ([Tautan](https://dl.acm.org/doi/10.1145/2843948))
+
+- [1] F. Ricci, L. Rokach, and B. Shapira, Recommender Systems Handbook. Springer, 2015.([Tautan](https://www.researchgate.net/publication/227268858_Recommender_Systems_Handbook))
+- [2] C. A. Gómez-Uribe and N. Hunt, “The Netflix Recommender System: Algorithms, Business Value, and Innovation,” ACM Transactions on Management Information Systems, 2016.([Tautan](https://dl.acm.org/doi/10.1145/2843948))
 
 ---
 
@@ -244,36 +245,47 @@ Dengan kata lain, hasil akhir ini merekomendasikan film-film yang paling mungkin
 
 ## 7. Evaluation
 
-### Metrik yang Digunakan
-1.  **Root Mean Squared Error (RMSE)**
+Proses evaluasi dilakukan dengan membuat fungsi bernama evaluate_hybrid_recommender. Fungsi ini bertugas untuk mengukur kinerja model hybrid yang dibangun dan efektivitas sistem rekomendasi secara objektif. Dalam proyek ini, evaluasi dilakukan pada test set untuk menilai seberapa baik model dapat merekomendasikan film yang relevan bagi pengguna.
 
-    $$
-    RMSE = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2}
-    $$
+### Metrik yang Digunakan
+
+    Kinerja model diukur menggunakan dua metrik standar dalam sistem rekomendasi, yaitu Precision@k dan Recall@k, dengan nilai k=10.
     
-2.  **Precision@k**
+1.  **Precision@k**
+
+Mengukur seberapa banyak film yang relevan dari total 10 film teratas yang direkomendasikan. Metrik ini menjawab pertanyaan, "Dari 10 film yang direkomendasikan, berapa persen yang benar-benar disukai pengguna?".
 
 $$
     Precision@k = \frac{|\{ \text{Rekomendasi relevan pada top-k} \}|}{k}
 $$
     
-3.  **Recall@k**
+2.  **Recall@k**
+
+Mengukur seberapa banyak film relevan yang berhasil ditemukan oleh sistem dari keseluruhan film relevan yang ada untuk seorang pengguna. Metrik ini menjawab pertanyaan, "Dari semua film yang seharusnya disukai pengguna, berapa persen yang berhasil direkomendasikan dalam 10 besar?".
 
 $$
     Recall@k = \frac{|\{ \text{Rekomendasi relevan pada top-k} \}|}{|\{ \text{Seluruh item relevan} \}|}
 $$
 
+Film dianggap "relevan" jika pengguna memberikan rating 4.0 atau lebih tinggi pada film tersebut dalam data uji.
+
 ### Hasil Evaluasi
-Kinerja sistem yang diukur dengan Precision@k dan Recall@k pada k=10 masih sangat rendah.
+Setelah dilakukan pengujian pada sampel pengguna dari data uji, model hibrida menghasilkan skor performa sebagai berikut:
 -   **Rata-rata Precision@10**: **0.0380** (hanya sekitar 3.8% dari 10 rekomendasi teratas yang relevan).
 -   **Rata-rata Recall@10**: **0.0285** (sistem hanya berhasil menemukan 2.85% dari total film relevan bagi pengguna).
 
-### Analisis Lebih Lanjut
-Hasil yang rendah menunjukkan beberapa area yang perlu diperbaiki:
--   **Keterbatasan Data**: Jumlah data evaluasi mungkin tidak cukup besar atau tersebar merata.
--   **Masalah Cold-Start**: Banyak pengguna dalam set evaluasi yang tidak memiliki riwayat rating yang cukup, sehingga rekomendasi menjadi tidak akurat.
--   **Bobot Model Hibrida**: Pembobotan 60:40 mungkin belum optimal dan perlu disesuaikan.
--   **Definisi "Relevan"**: Batasan film relevan (misalnya, rating > 4) mungkin terlalu ketat jika sebagian besar rating pengguna lebih rendah.
+Hasil ini menunjukkan bahwa kinerja model masih tergolong sangat rendah. Nilai Precision 3.8% mengindikasikan bahwa, rata-rata, dari 10 film yang direkomendasikan, kurang dari satu film yang benar-benar relevan bagi pengguna. Sementara itu, nilai Recall 2.85% menunjukkan bahwa sistem gagal menemukan sebagian besar film yang seharusnya disukai oleh pengguna.
+
+### Analisis Kualitatif dan Potensi Penyebab
+
+Meskipun skor metriknya rendah, analisis kualitatif menunjukkan bahwa rekomendasi yang diberikan sering kali masuk akal secara tematis (misalnya, pengguna yang suka fiksi ilmiah akan direkomendasikan film fiksi ilmiah lainnya). Namun, jumlah "hits" (rekomendasi yang cocok dengan film relevan di data uji) sangat sedikit. Dari sampel pengguna yang dievaluasi, hanya sebagian kecil yang mendapatkan setidaknya satu rekomendasi yang tepat.
+
+Berdasarkan analisis dalam notebook, beberapa faktor yang diduga menjadi penyebab rendahnya performa model adalah:
+
+-   **Keterbatasan Data**: Jumlah data rating mungkin belum cukup untuk melatih model secara komprehensif.
+-   **Masalah Cold-Start**: Sebagian besar pengguna dalam sampel evaluasi memiliki jumlah "hits" nol, menandakan model kesulitan memberikan prediksi akurat untuk pengguna dengan riwayat rating yang minim.
+-   **Bobot Model Hibrida**: Kombinasi bobot (0.6 untuk CF dan 0.4 untuk CB) mungkin belum ideal dan memerlukan penyesuaian lebih lanjut.
+-   **Definisi "Relevan"**: Batasan rating 4.0 sebagai ambang batas relevansi mungkin terlalu ketat, terutama jika sebagian besar rating pengguna berada di rentang yang lebih rendah.
 
 Secara keseluruhan, alur kerja rekomendasi berhasil dibangun, namun model memerlukan iterasi lebih lanjut untuk siap digunakan di lingkungan produksi.
 
