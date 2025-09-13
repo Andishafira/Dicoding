@@ -63,7 +63,7 @@ Tujuan utama proyek ini adalah membangun sistem rekomendasi film yang dapat meni
 
 ## 4. Data Understanding
 
-Dataset yang digunakan adalah **MovieLens 100k**, tersedia di [GroupLens Research](https://grouplens.org/datasets/movielens/100k/). Dataset ini terdiri dari empat file utama.
+Dataset yang digunakan adalah **MovieLens 100k**, tersedia di [GroupLens Research](https://grouplens.org/datasets/movielens/100k/). Dataset ini terdiri dari empat file utama yaitu df_movie, df_ratings, df_tags dan df_links. Dalam project ini, dataset yang digunakan hanyalah df_movie dan df_ratings. Hal ini dikarenakan kedua file tersebut telah menyediakan seluruh data yang diperlukan untuk membangun kedua arsitektur model yang digunakan dalam sistem hibrida ini. Uraian detail informasi dari dataset df_ratings dan df_movie akan dijelaskan pada sub bab berikutnya.
 
 ### 4.1 `ratings.csv`
 -   **Jumlah Data**: 100.000 baris × 4 kolom.
@@ -74,7 +74,7 @@ Dataset yang digunakan adalah **MovieLens 100k**, tersedia di [GroupLens Researc
     -   `movieId`: ID unik untuk film yang diberi peringkat.
     -   `rating`: Peringkat yang diberikan, menggunakan skala bintang 5 dengan kelipatan setengah bintang (0,5 hingga 5,0).
     -   `timestamp`: Waktu saat peringkat diberikan, diukur dalam detik sejak 1 Januari 1970 UTC (Coordinated Universal Time).
--   **Fungsi**: Data utama untuk *collaborative filtering*.
+-   **Fungsi**: Data utama untuk *collaborative filtering* karena memerlukan data interaksi inti, yaitu userId, movieId, dan rating, yang semuanya tersedia di df_ratings.
 
 ### 4.2 `movies.csv`
 -   **Jumlah Data**: 1.682 baris × 3 kolom.
@@ -83,59 +83,23 @@ Dataset yang digunakan adalah **MovieLens 100k**, tersedia di [GroupLens Researc
 -   **Fitur**:
     -   `movieId`: ID unik film.
     -   `title`: Judul film dan tahun rilis.
-    -   `genres`: Daftar genre yang dipisahkan oleh `|`.
--   **Fungsi**: Sumber utama untuk *Content-based Filtering*.
-
-### 4.3 `tags.csv`
--   **Jumlah Data**: 3.689 baris × 4 kolom.
--   **Isi Data**: Berisi semua data tag (label) yang diberikan pengguna pada film. Setiap barisnya merepresentasikan satu tag yang diterapkan pada satu film oleh satu pengguna.
--   **Kondisi Data**: Terdapat *missing value* pada kolom `tag`.
--   **Fitur**:
-    - `userId`: ID pengguna yang membuat tag.
-    - `movieId`: ID film yang diberi tag.
-    - `tag`: Metadata yang dibuat oleh pengguna, biasanya berupa kata tunggal atau frasa pendek.
-    - `timestamp`: Waktu saat tag dibuat, diukur dalam detik sejak 1 Januari 1970 UTC.
--   **Fungsi**: Metadata tambahan buatan pengguna untuk meningkatkan model berbasis konten.
-
-### 4.4 `links.csv`
--   **Jumlah Data**: 1.682 baris × 3 kolom.
--   **Isi Data**: Berfungsi sebagai jembatan untuk menghubungkan dataset MovieLens dengan sumber data film lainnya. Setiap baris dalam file ini merepresentasikan satu film..
--   **Kondisi Data**: Tidak ada *missing value*.
--   **Fitur**:
-      - `movieId`: ID film yang digunakan oleh MovieLens
-      - `imdbId`: ID film yang digunakan oleh IMDb (Internet Movie Database).
-      - `tmdbId`: ID film yang digunakan oleh The Movie Database (TMDb).
-
-**Insight EDA**:
--   Distribusi rating condong ke nilai 3 & 4.
--   Genre terpopuler adalah Drama, Comedy, dan Action.
--   Dataset bersifat *sparse* (sebagian besar pengguna hanya menilai sebagian kecil film).
+    -   `genres`: Daftar genre yang dipisahkan oleh `|`. Berdasarkan explorasi dasar yang telah dilakukan, terdapat 951 jenis genre yang unik pada dataset ini. Sedangkan genre yang paling populer adalah drama, comedy, thriller dan action.
+-   **Fungsi**: Sumber utama untuk *Content-based Filtering* karena membutuhkan fitur genre sebagai fitur utamanya.
 
 ---
 
 ## 5. Data Preparation
 Tahapan persiapan data merupakan fondasi penting dalam membangun model machine learning yang andal. Proses ini memastikan bahwa data yang digunakan bersih, terstruktur, dan siap untuk diolah oleh algoritma. Tahapan persiapan data yang dilakukan adalah sebagai berikut:
-1.  **Pengumpulan dan Eksplorasi Data**: Langkah awal adalah mengumpulkan dan memahami dataset yang tersedia.
-    - **Akuisisi Data**: Dataset yang relevan diunduh dari repositori publik di GitHub. Proses ini mencakup empat file utama: movies.csv, ratings.csv, tags.csv, dan links.csv.
 
-    - **Memuat Data**: Setiap file CSV dimuat ke dalam struktur data DataFrame menggunakan library Pandas untuk memudahkan manipulasi dan analisis.
-
-    - **Analisis Data Eksplorasi (EDA)**: Analisis awal dilakukan untuk memahami karakteristik dataset:
-
-    - **Struktur dan Isi**: Tinjauan awal pada beberapa baris pertama dari df_movie dan df_ratings menunjukkan format data, termasuk kolom seperti movieId, title, genres, userId, dan rating.
-
-    - **Volume Data**: Pemeriksaan informasi DataFrame (.info()) mengonfirmasi bahwa tidak ada nilai yang hilang (missing values) pada dataset movies dan ratings. Ditemukan bahwa dataset berisi 9.742 judul film dan 100.836 data rating.
-
-    - **Distribusi Genre**: Analisis pada kolom genres mengungkapkan bahwa genre yang paling umum dalam dataset adalah Drama dan Comedy.
-
-2. **Pra-pemrosesan dan Penataan Data** : Setelah data dipahami, langkah selanjutnya adalah menatanya agar sesuai untuk pemodelan.
+1. **Pra-pemrosesan dan Penataan Data** : Setelah data dipahami, langkah selanjutnya adalah menatanya agar sesuai untuk pemodelan.
 
     - **Penggabungan Data (Merging)**: Untuk menciptakan dataset yang komprehensif, tabel df_ratings dan df_movie digabungkan. Penggabungan ini dilakukan berdasarkan kunci bersama, yaitu movieId. Hasilnya adalah sebuah DataFrame tunggal yang menghubungkan setiap interaksi rating pengguna dengan metadata film yang relevan (judul dan genre) dalam satu baris. Langkah ini krusial karena memungkinkan model untuk mempelajari hubungan antara preferensi pengguna dan atribut film secara bersamaan.
     - **Pembagian Data (Splitting)**: Dataset yang telah digabungkan kemudian dibagi menjadi dua subset terpisah:
         - Data Latih (Training Set): Sebesar 80% dari total data. Set ini digunakan sepenuhnya untuk melatih model-model rekomendasi.
         - Data Uji (Test Set): Sebesar 20% dari total data. Set ini "disembunyikan" dari model selama proses pelatihan dan hanya digunakan pada tahap akhir untuk mengevaluasi kinerja model secara objektif pada data yang belum pernah dilihat sebelumnya. Pembagian ini penting untuk mengukur kemampuan generalisasi model dan menghindari overfitting.
 
-
+    - **Vektorisasi Fitur dengan TF-IDF (Term Frequency-Inverse Document Frequency)** : Proses ini dilakukan dalam tahap preprocessing data untuk metode content based filtering. Tahap ini mengubah data tekstual genre menjadi format numerik yang dapat diolah secara matematis. TF-IDF memberikan bobot yang lebih tinggi pada genre yang lebih langka (dan dianggap lebih informatif sebagai penanda kemiripan) dan bobot lebih rendah pada genre yang sangat umum di seluruh dataset. Hasilnya adalah sebuah matriks angka (tfidf_matrix) di mana setiap baris mewakili satu film dan setiap kolom mewakili satu genre unik, dengan nilai di dalamnya adalah skor bobot TF-IDF.
+      
 ---
 
 ## 6. Modeling and Result
@@ -173,7 +137,6 @@ Pendekatan ini merekomendasikan film berdasarkan analisis atribut intrinsiknya, 
 
 **Cara Kerja**
 
-- **Vektorisasi Fitur dengan TF-IDF** : Langkah pertama adalah mengubah data tekstual genre menjadi format numerik yang dapat diolah secara matematis. Teknik TF-IDF (Term Frequency-Inverse Document Frequency) digunakan untuk tujuan ini. TF-IDF memberikan bobot yang lebih tinggi pada genre yang lebih langka (dan dianggap lebih informatif sebagai penanda kemiripan) dan bobot lebih rendah pada genre yang sangat umum di seluruh dataset. Hasilnya adalah setiap film direpresentasikan sebagai sebuah "vektor fitur" numerik yang unik.
 - **Kalkulasi Kemiripan dengan Cosine Similarity**: Setelah setiap film memiliki representasi vektor, metrik Cosine Similarity digunakan untuk mengukur tingkat kemiripan antar film. Metrik ini mengkalkulasi kosinus sudut antara dua vektor dalam ruang multidimensi. Skor kemiripan yang dihasilkan berkisar dari 0 (sama sekali tidak mirip) hingga 1 (identik secara atribut). Hasil kalkulasi ini disimpan dalam sebuah matriks kemiripan yang komprehensif, memungkinkan sistem untuk secara cepat menemukan film-film yang paling mirip untuk judul apa pun.
 
 **Collaborative Filtering**
