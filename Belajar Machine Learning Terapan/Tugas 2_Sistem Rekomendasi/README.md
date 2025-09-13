@@ -12,7 +12,7 @@ Pengujian model dilakukan dengan metrik **Root Mean Squared Error (RMSE)** untuk
 
 ## 1. Pendahuluan
 
-Sistem rekomendasi adalah alat vital dalam platform digital modern, dirancang untuk mempersonalisasi pengalaman pengguna dan meningkatkan interaksi. Tanpa sistem ini, pengguna seringkali merasa kesulitan menemukan konten yang relevan di tengah banjirnya pilihan, yang dapat menyebabkan penurunan retensi. Proyek ini bertujuan membangun sistem rekomendasi yang cerdas dan efisien, yang tidak hanya akurat tetapi juga mampu memberikan rekomendasi yang beragam dan menarik.
+Sistem rekomendasi adalah alat vital dalam platform digital modern, dirancang untuk mempersonalisasi pengalaman pengguna dan meningkatkan interaksi[1][2]. Tanpa sistem ini, pengguna seringkali merasa kesulitan menemukan konten yang relevan di tengah banjirnya pilihan, yang dapat menyebabkan penurunan retensi. Proyek ini bertujuan membangun sistem rekomendasi yang cerdas dan efisien, yang tidak hanya akurat tetapi juga mampu memberikan rekomendasi yang beragam dan menarik[1][2].
 
 ---
 
@@ -28,8 +28,8 @@ Proyek ini berfokus pada pembangunan dan evaluasi sistem rekomendasi film menggu
 
 **Referensi Terkait**:
 
-- [1] F. Ricci, L. Rokach, and B. Shapira, Recommender Systems Handbook. Springer, 2015.([Tautan](https://www.researchgate.net/publication/227268858_Recommender_Systems_Handbook))
-- [2] C. A. Gómez-Uribe and N. Hunt, “The Netflix Recommender System: Algorithms, Business Value, and Innovation,” ACM Transactions on Management Information Systems, 2016.([Tautan](https://dl.acm.org/doi/10.1145/2843948))
+[1] F. Ricci, L. Rokach, and B. Shapira, Recommender Systems Handbook. Springer, 2015.([Tautan](https://www.researchgate.net/publication/227268858_Recommender_Systems_Handbook))
+[2] C. A. Gómez-Uribe and N. Hunt, “The Netflix Recommender System: Algorithms, Business Value, and Innovation,” ACM Transactions on Management Information Systems, 2016.([Tautan](https://dl.acm.org/doi/10.1145/2843948))
 
 ---
 
