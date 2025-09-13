@@ -29,6 +29,7 @@ Proyek ini berfokus pada pembangunan dan evaluasi sistem rekomendasi film menggu
 **Referensi Terkait**:
 
 [1] F. Ricci, L. Rokach, and B. Shapira, Recommender Systems Handbook. Springer, 2015.([Tautan](https://www.researchgate.net/publication/227268858_Recommender_Systems_Handbook))
+
 [2] C. A. Gómez-Uribe and N. Hunt, “The Netflix Recommender System: Algorithms, Business Value, and Innovation,” ACM Transactions on Management Information Systems, 2016.([Tautan](https://dl.acm.org/doi/10.1145/2843948))
 
 ---
