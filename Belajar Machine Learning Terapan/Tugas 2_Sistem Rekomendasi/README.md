@@ -242,37 +242,46 @@ Hasil ini menunjukkan bahwa kinerja model masih tergolong sangat rendah. Nilai P
 
 ### Perbandingan dengan metode content-based filtering murni dan collaborative filtering murni
 
+Untuk membandingkan performa model hibrida yang telah dibangun, dilakukan perbandingan performa dengan metode collaborative filtering murni dan content-based filtering murni. Berikut adalah hasil yang didapatkan.
+
+![Perbandingan_hasil](https://raw.githubusercontent.com/Andishafira/Dicoding/main/Belajar%20Machine%20Learning%20Terapan/Tugas%202_Sistem%20Rekomendasi/perbandingan%20hasil.png)
+
+Berdasarkan hasil tersebut dapat dilihat jika metode **collaborative filtering mendapatkan hasil yang paling baik dengan precision@10 sebesar 0.10000 dan recall@10 sebesar 0.086472**. Angka ini menunjukkan bahwa dengan hanya melihat pola perilaku pengguna (apa yang disukai pengguna serupa), model ini berhasil menempatkan 1 dari 10 film yang benar-benar relevan di daftar rekomendasi. Ini membuktikan bahwa sinyal "kearifan kolektif" (apa yang disukai orang lain) adalah prediktor yang jauh lebih kuat daripada fitur genre. Model CF berhasil menemukan koneksi lintas-genre yang tidak bisa dilihat oleh CBF.
+
+Sedangkan, Performa model content based filtering hampir nol. Presisi 0.6% pada dasarnya berarti model ini hampir tidak pernah memberikan rekomendasi yang benar dan performanya tidak jauh lebih baik dari tebakan acak. Ini membuktikan bahwa **strategi CBF yang digunakan (mencari film yang mirip genrenya hanya dengan satu film favorit pengguna) adalah strategi yang sangat tidak efektif**. Selera pengguna jauh lebih kompleks daripada hanya menyukai satu genre yang sama berulang kali.
+
 
 ### Analisis Kualitatif dan Potensi Penyebab
 
-Meskipun skor metriknya rendah, analisis kualitatif menunjukkan bahwa rekomendasi yang diberikan sering kali masuk akal secara tematis (misalnya, pengguna yang suka fiksi ilmiah akan direkomendasikan film fiksi ilmiah lainnya). Namun, jumlah "hits" (rekomendasi yang cocok dengan film relevan di data uji) sangat sedikit. Dari sampel pengguna yang dievaluasi, hanya sebagian kecil yang mendapatkan setidaknya satu rekomendasi yang tepat.
+Berdasarkan hasil yang didapatkan dari perbandingan performa tiap metode, dapat disimpulkan bahwa metode collaborative filtering memiliki performa yang paling baik disusul oleh metode hibrida. Hal ini kemungkinan besar disebabkan oleh model content-based filtering yang dibangun yang sangat buruk dan "meracuni" hasil yang baik dari Model collaborative filtering. Model hibrida seharusnya mengambil yang terbaik dari kedua metode, tetapi yang terjadi adalah menggabungkan sinyal yang kuat (CF) dengan sinyal yang sangat bising dan salah (CBF). Ini berarti pemberian bobot sebesar 40% pada skor dari model yang terbukti 99.4% salah (berdasarkan presisinya yang 0.00625).
 
-Berdasarkan analisis dalam notebook, beberapa faktor yang diduga menjadi penyebab rendahnya performa model adalah:
-
--   **Keterbatasan Data**: Jumlah data rating mungkin belum cukup untuk melatih model secara komprehensif.
--   **Masalah Cold-Start**: Sebagian besar pengguna dalam sampel evaluasi memiliki jumlah "hits" nol, menandakan model kesulitan memberikan prediksi akurat untuk pengguna dengan riwayat rating yang minim.
--   **Bobot Model Hibrida**: Kombinasi bobot (0.6 untuk CF dan 0.4 untuk CB) mungkin belum ideal dan memerlukan penyesuaian lebih lanjut.
--   **Definisi "Relevan"**: Batasan rating 4.0 sebagai ambang batas relevansi mungkin terlalu ketat, terutama jika sebagian besar rating pengguna berada di rentang yang lebih rendah.
-
-Secara keseluruhan, alur kerja rekomendasi berhasil dibangun, namun model memerlukan iterasi lebih lanjut untuk siap digunakan di lingkungan produksi.
 
 ---
 
 ## 8. Strategi Bisnis
-1.  **Personalisasi Dashboard**: Menampilkan rekomendasi personal di halaman utama.
-2.  **Fitur "Film Serupa"**: Menampilkan rekomendasi berbasis konten pada halaman detail film.
-3.  **Peningkatan Retensi**: Mengirimkan notifikasi atau email berisi rekomendasi untuk pengguna yang tidak aktif.
-4.  **Segmentasi Pasar**: Menjalankan kampanye promosi yang disesuaikan dengan preferensi segmen pengguna.
+
+Sistem hibrida ini memiliki potensi besar untuk diintegrasikan ke dalam operasi bisnis. Berikut adalah beberapa strategi utama:
+
+* Personalisasi Halaman Utama: Rekomendasi paling relevan akan ditampilkan di halaman utama, memastikan pengguna langsung disambut dengan konten yang mereka sukai. Ini dapat meningkatkan rata-rata sesi pengguna dan menurunkan tingkat bounce rate.
+
+* Fitur "Lebih seperti ini": Di halaman detail film, pengguna akan melihat daftar film yang mirip secara tematis. Fitur ini dapat meminimalkan waktu yang dihabiskan pengguna untuk mencari konten dan mendorong mereka untuk terus menonton.
+
+* Kampanye Pemasaran yang Ditargetkan: Model dapat digunakan untuk mengidentifikasi film-film yang mungkin disukai oleh pengguna yang tidak aktif. Rekomendasi yang dipersonalisasi dapat dikirim melalui email atau notifikasi untuk mendorong mereka kembali ke platform.
+
+* Onboarding Pengguna Baru: Saat pengguna pertama kali mendaftar, mereka dapat diminta untuk memberi rating pada beberapa film. Sistem dapat menggunakan model Content-based untuk memberikan rekomendasi instan, menciptakan pengalaman yang menarik sejak awal.
 
 ---
 
 ## 9. Kesimpulan
-Proyek ini berhasil membangun sistem rekomendasi film hibrida dengan alur kerja yang komprehensif. Nilai **RMSE** yang rendah menunjukkan model cukup akurat dalam memprediksi rating, namun nilai **Precision@k** dan **Recall@k** yang rendah menegaskan perlunya perbaikan lebih lanjut pada aspek relevansi rekomendasi.
+Proyek ini berhasil membangun sistem rekomendasi film menggunakan metode hibrida. Meski demikian, berdasarkan analisis evaluasi, dapat disimpulkan bahwa model hibrida menunjukkan kinerja sub-optimal, dengan skor metrik performa yang lebih rendah dibandingkan model Collaborative Filtering (CF) murni.
+
+Degradasi performa ini disebabkan oleh penggabungan sinyal dari model Content-Based Filtering (CBF) yang terbukti memiliki akurasi prediktif yang sangat rendah. Alokasi bobot yang signifikan (40%) pada komponen CBF yang tidak akurat ini secara efektif mendistorsi dan menurunkan kualitas peringkat relevan yang sebelumnya telah dihasilkan oleh model CF yang jauh lebih akurat. Dengan kata lain, intervensi dari prediktor yang lemah telah memberikan dampak negatif pada hasil akhir sistem.
 
 **Rekomendasi Pengembangan Selanjutnya**:
 -   Melakukan eksperimen bobot hibrida (misalnya melalui A/B testing).
--   Menambahkan fitur konten lain (aktor, sutradara, tag pengguna).
--   Mengeksplorasi algoritma yang lebih canggih (misalnya SVD++, *deep learning recommenders*).
+-   Ubah Logika Hibrida (Filtering/Re-ranking) : Strategi penjumlahan berbobot (weighted sum) memungkinkan model yang buruk (CBF) untuk "mempromosikan" film sampah ke atas daftar. Strategi yang lebih aman adalah menggunakan CF sebagai generator kandidat dan CBF sebagai filter/pemoles.
+-   Perbaikan Komponen Model (Meningkatkan Sinyal) : Tambahkan Weight Decay (wd) ke learner untuk regularisasi L2 di FastAI.
+-   Perkuat Model Content-Based (CBF)
 
 ---
 
