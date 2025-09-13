@@ -65,18 +65,18 @@ Dataset yang digunakan adalah **MovieLens 100k**, tersedia di [GroupLens Researc
 
 ### 4.1 `ratings.csv`
 -   **Jumlah Data**: 100.000 baris × 4 kolom.
--   **Isi Data**: Semua rating yang diberikan pengguna terhadap film.
+-   **Isi Data**: Berisi semua data peringkat (rating) film yang diberikan oleh pengguna. Setiap baris dalam file ini mencatat satu peringkat untuk satu film dari satu pengguna.
 -   **Kondisi Data**: Tidak ada *missing value* atau duplikasi.
 -   **Fitur**:
-    -   `userId`: ID unik pengguna.
-    -   `movieId`: ID unik film.
-    -   `rating`: Skor penilaian (0.5 – 5.0).
-    -   `timestamp`: Waktu pemberian rating.
+    -   `userId`: ID unik yang mewakili pengguna yang memberikan peringkat.
+    -   `movieId`: ID unik untuk film yang diberi peringkat.
+    -   `rating`: Peringkat yang diberikan, menggunakan skala bintang 5 dengan kelipatan setengah bintang (0,5 hingga 5,0).
+    -   `timestamp`: Waktu saat peringkat diberikan, diukur dalam detik sejak 1 Januari 1970 UTC (Coordinated Universal Time).
 -   **Fungsi**: Data utama untuk *collaborative filtering*.
 
 ### 4.2 `movies.csv`
 -   **Jumlah Data**: 1.682 baris × 3 kolom.
--   **Isi Data**: Informasi metadata film.
+-   **Isi Data**: Berisi informasi umum tentang film. Setiap baris dalam file ini mewakili satu film.
 -   **Kondisi Data**: Tidak ada *missing value*.
 -   **Fitur**:
     -   `movieId`: ID unik film.
@@ -86,16 +86,23 @@ Dataset yang digunakan adalah **MovieLens 100k**, tersedia di [GroupLens Researc
 
 ### 4.3 `tags.csv`
 -   **Jumlah Data**: 3.689 baris × 4 kolom.
--   **Isi Data**: Tag atau label yang diberikan pengguna pada film.
+-   **Isi Data**: Berisi semua data tag (label) yang diberikan pengguna pada film. Setiap barisnya merepresentasikan satu tag yang diterapkan pada satu film oleh satu pengguna.
 -   **Kondisi Data**: Terdapat *missing value* pada kolom `tag`.
--   **Fitur**: `userId`, `movieId`, `tag`, `timestamp`.
+-   **Fitur**:
+    - `userId`: ID pengguna yang membuat tag.
+    - `movieId`: ID film yang diberi tag.
+    - `tag`: Metadata yang dibuat oleh pengguna, biasanya berupa kata tunggal atau frasa pendek.
+    - `timestamp`: Waktu saat tag dibuat, diukur dalam detik sejak 1 Januari 1970 UTC.
 -   **Fungsi**: Metadata tambahan buatan pengguna untuk meningkatkan model berbasis konten.
 
 ### 4.4 `links.csv`
 -   **Jumlah Data**: 1.682 baris × 3 kolom.
--   **Isi Data**: Tautan ke database film eksternal.
+-   **Isi Data**: Berfungsi sebagai jembatan untuk menghubungkan dataset MovieLens dengan sumber data film lainnya. Setiap baris dalam file ini merepresentasikan satu film..
 -   **Kondisi Data**: Tidak ada *missing value*.
--   **Fitur**: `movieId`, `imdbId`, `tmdbId`.
+-   **Fitur**:
+      - `movieId`: ID film yang digunakan oleh MovieLens
+      - `imdbId`: ID film yang digunakan oleh IMDb (Internet Movie Database).
+      - `tmdbId`: ID film yang digunakan oleh The Movie Database (TMDb).
 
 **Insight EDA**:
 -   Distribusi rating condong ke nilai 3 & 4.
@@ -105,59 +112,130 @@ Dataset yang digunakan adalah **MovieLens 100k**, tersedia di [GroupLens Researc
 ---
 
 ## 5. Data Preparation
+Tahapan persiapan data merupakan fondasi penting dalam membangun model machine learning yang andal. Proses ini memastikan bahwa data yang digunakan bersih, terstruktur, dan siap untuk diolah oleh algoritma. Tahapan persiapan data yang dilakukan adalah sebagai berikut:
+1.  **Pengumpulan dan Eksplorasi Data**: Langkah awal adalah mengumpulkan dan memahami dataset yang tersedia.
+    - **Akuisisi Data**: Dataset yang relevan diunduh dari repositori publik di GitHub. Proses ini mencakup empat file utama: movies.csv, ratings.csv, tags.csv, dan links.csv.
 
-Tahapan persiapan data yang dilakukan adalah sebagai berikut:
-1.  **Pengumpulan dan Eksplorasi Data**: Dataset diunduh dan dianalisis untuk memahami struktur dan isinya. Ditemukan 9.742 judul film dan 100.836 rating.
-2.  **Persiapan Data**:
-    -   Tabel `ratings` dan `movies` digabungkan untuk menghubungkan setiap rating dengan metadata filmnya.
-    -   Data dibagi menjadi set latih (80%) dan set uji (20%) untuk evaluasi model yang objektif.
-3.  **Pengembangan Model Hibrida**:
-    -   **Collaborative Filtering**: Dibangun menggunakan *library* **FastAI** untuk mempelajari pola interaksi pengguna-film.
-    -   **Content-Based Filtering**: Dibangun menggunakan **TF-IDF Vectorizer** dan **Cosine Similarity** dari *library* Scikit-learn untuk merekomendasikan film berdasarkan kemiripan genre.
-    -   **Penggabungan Hibrida**: Hasil dari kedua model digabungkan dengan sistem pembobotan untuk menghasilkan skor akhir.
-4.  **Evaluasi Kinerja**: Model dievaluasi menggunakan metrik **Precision@10** dan **Recall@10** pada data uji.
-5.  **Kesimpulan dan Strategi**: Hasil dianalisis untuk menarik kesimpulan dan merumuskan potensi bisnis.
-6.  **Pembuatan Laporan**: Seluruh proses didokumentasikan dalam laporan ini.
+    - **Memuat Data**: Setiap file CSV dimuat ke dalam struktur data DataFrame menggunakan library Pandas untuk memudahkan manipulasi dan analisis.
+
+    - **Analisis Data Eksplorasi (EDA)**: Analisis awal dilakukan untuk memahami karakteristik dataset:
+
+    - **Struktur dan Isi**: Tinjauan awal pada beberapa baris pertama dari df_movie dan df_ratings menunjukkan format data, termasuk kolom seperti movieId, title, genres, userId, dan rating.
+
+    - **Volume Data**: Pemeriksaan informasi DataFrame (.info()) mengonfirmasi bahwa tidak ada nilai yang hilang (missing values) pada dataset movies dan ratings. Ditemukan bahwa dataset berisi 9.742 judul film dan 100.836 data rating.
+
+    - **Distribusi Genre**: Analisis pada kolom genres mengungkapkan bahwa genre yang paling umum dalam dataset adalah Drama dan Comedy.
+
+2. **Pra-pemrosesan dan Penataan Data** : Setelah data dipahami, langkah selanjutnya adalah menatanya agar sesuai untuk pemodelan.
+
+    - **Penggabungan Data (Merging)**: Untuk menciptakan dataset yang komprehensif, tabel df_ratings dan df_movie digabungkan. Penggabungan ini dilakukan berdasarkan kunci bersama, yaitu movieId. Hasilnya adalah sebuah DataFrame tunggal yang menghubungkan setiap interaksi rating pengguna dengan metadata film yang relevan (judul dan genre) dalam satu baris. Langkah ini krusial karena memungkinkan model untuk mempelajari hubungan antara preferensi pengguna dan atribut film secara bersamaan.
+    - **Pembagian Data (Splitting)**: Dataset yang telah digabungkan kemudian dibagi menjadi dua subset terpisah:
+        - Data Latih (Training Set): Sebesar 80% dari total data. Set ini digunakan sepenuhnya untuk melatih model-model rekomendasi.
+        - Data Uji (Test Set): Sebesar 20% dari total data. Set ini "disembunyikan" dari model selama proses pelatihan dan hanya digunakan pada tahap akhir untuk mengevaluasi kinerja model secara objektif pada data yang belum pernah dilihat sebelumnya. Pembagian ini penting untuk mengukur kemampuan generalisasi model dan menghindari overfitting.
+
 
 ---
 
-## 6. Metodologi / Modeling and Result
+## 6. Modeling and Result
+Metode yang diimplementasikan dalam proyek ini adalah sistem rekomendasi hibrida. Pendekatan ini secara spesifik menggabungkan dua metodologi utama, yaitu Collaborative Filtering dan Content-Based Filtering, untuk menghasilkan rekomendasi yang lebih unggul dibandingkan jika masing-masing metode digunakan secara terpisah.
 
-### 6.1 Content-based Filtering
-Pendekatan ini merekomendasikan film berdasarkan kesamaan atributnya, terutama **genre**. Keunggulannya adalah mampu mengatasi masalah *cold-start* karena tidak bergantung pada data pengguna lain.
+### 6.1 Modeling
 
-**Cara Kerja:**
-1.  **Vektorisasi Fitur dengan TF-IDF**: Genre setiap film diubah menjadi vektor numerik. **TF-IDF** (*Term Frequency-Inverse Document Frequency*) memberikan bobot lebih tinggi pada genre yang lebih langka dan informatif.
-2.  **Kalkulasi Kemiripan dengan Cosine Similarity**: Setelah setiap film direpresentasikan sebagai vektor, **Cosine Similarity** digunakan untuk mengukur sudut antara dua vektor. Skor kemiripan berkisar dari 0 (tidak mirip) hingga 1 (identik), yang kemudian disimpan dalam sebuah matriks kemiripan.
+**Arsitektur Penggabungan Model**
 
-### 6.2 Collaborative Filtering
-Pendekatan ini bekerja dengan mengidentifikasi pola dari data interaksi historis pengguna (rating) berdasarkan asumsi bahwa pengguna dengan selera serupa di masa lalu akan memiliki selera serupa di masa depan.
+Sistem ini tidak hanya mencampur hasil, tetapi menggunakan strategi penggabungan yang canggih yang disebut re-ranking berbobot.
 
-**Teknik dan Parameter:**
+1. Generasi Kandidat oleh Collaborative Filtering: Tahap awal dimulai dengan model Collaborative Filtering yang menganalisis pola rating dari seluruh pengguna. Model ini menghasilkan daftar prediksi film yang luas untuk seorang pengguna, berdasarkan preferensi dari pengguna lain yang memiliki selera serupa.
+    
+2. Penyempurnaan oleh Content-Based Filtering: Daftar kandidat tersebut kemudian disempurnakan oleh model Content-Based Filtering. Model ini menghitung seberapa mirip setiap film kandidat dengan film-film yang sudah secara eksplisit disukai oleh pengguna di masa lalu, berdasarkan kesamaan genre.
+    
+3. Hasil Akhir: Skor dari kedua model tersebut kemudian digabungkan dengan bobot tertentu untuk menghasilkan peringkat akhir. Dengan demikian, film yang direkomendasikan tidak hanya populer di kalangan pengguna serupa tetapi juga relevan secara tematis dengan selera pribadi pengguna.
+
+**Keunggulan Metode Hibrida**
+
+Menggabungkan kedua pendekatan ini memberikan beberapa keuntungan signifikan yang mengatasi keterbatasan dari masing-masing metode:
+
+- Mengatasi Masalah Cold-Start: Pure Collaborative Filtering kesulitan memberikan rekomendasi kepada pengguna baru yang belum memiliki riwayat rating. Dengan adanya komponen Content-Based, sistem tetap dapat memberikan rekomendasi yang relevan sejak awal dengan menganalisis atribut film yang dipilih pengguna.
+
+- Meningkatkan Akurasi dan Personalisasi: Metode hibrida menghasilkan rekomendasi yang lebih akurat. Collaborative Filtering menangkap selera "tersembunyi" dan tren, sementara Content-Based memastikan rekomendasi tersebut sesuai dengan preferensi eksplisit pengguna, menciptakan pengalaman yang sangat personal.
+
+- Meningkatkan Keberagaman dan Serendipity: Pure Content-Based Filtering berisiko menjebak pengguna dalam "gelembung filter" (filter bubble), di mana mereka hanya direkomendasikan item yang sangat mirip. Komponen Collaborative Filtering mampu memecah kebosanan ini dengan merekomendasikan item baru yang tak terduga (serendipity) yang disukai oleh pengguna dengan selera serupa.
+
+- Kinerja yang Lebih Kuat dan Andal: Dengan menggabungkan dua sumber informasi yang berbeda (perilaku kolektif pengguna dan atribut item), sistem hibrida menjadi lebih kuat (robust). Jika salah satu model tidak memiliki cukup data untuk memberikan prediksi yang baik, model lainnya dapat mengkompensasi kekurangan tersebut.
+
+**Penjelasan Peran dan Cara Kerja Masing Masing Metode**
+
+1. **Content-based Filtering**
+
+Pendekatan ini merekomendasikan film berdasarkan analisis atribut intrinsiknya, dengan fokus utama pada genre. Metode ini bekerja dengan prinsip "jika Anda menyukai suatu item, Anda mungkin juga akan menyukai item lain yang 'mirip'". Keunggulan utamanya adalah kemampuannya untuk mengatasi masalah cold-start, di mana sistem dapat memberikan rekomendasi yang relevan kepada pengguna baru tanpa memerlukan data historis interaksi dari pengguna lain.
+
+**Cara Kerja**
+
+- **Vektorisasi Fitur dengan TF-IDF** : Langkah pertama adalah mengubah data tekstual genre menjadi format numerik yang dapat diolah secara matematis. Teknik TF-IDF (Term Frequency-Inverse Document Frequency) digunakan untuk tujuan ini. TF-IDF memberikan bobot yang lebih tinggi pada genre yang lebih langka (dan dianggap lebih informatif sebagai penanda kemiripan) dan bobot lebih rendah pada genre yang sangat umum di seluruh dataset. Hasilnya adalah setiap film direpresentasikan sebagai sebuah "vektor fitur" numerik yang unik.
+- **Kalkulasi Kemiripan dengan Cosine Similarity**: Setelah setiap film memiliki representasi vektor, metrik Cosine Similarity digunakan untuk mengukur tingkat kemiripan antar film. Metrik ini mengkalkulasi kosinus sudut antara dua vektor dalam ruang multidimensi. Skor kemiripan yang dihasilkan berkisar dari 0 (sama sekali tidak mirip) hingga 1 (identik secara atribut). Hasil kalkulasi ini disimpan dalam sebuah matriks kemiripan yang komprehensif, memungkinkan sistem untuk secara cepat menemukan film-film yang paling mirip untuk judul apa pun.
+
+**Collaborative Filtering**
+
+Pendekatan ini bekerja dengan mengidentifikasi pola dari data interaksi historis pengguna (dalam hal ini, rating). Asumsi dasarnya adalah bahwa pengguna yang memiliki selera serupa di masa lalu (misalnya, menyukai film-film yang sama) kemungkinan besar akan memiliki selera yang serupa di masa depan. Metode ini unggul dalam menemukan rekomendasi yang baru dan tak terduga (serendipity) karena tidak bergantung pada atribut item.
+
+**Cara Kerja**
+
+Teknik inti yang digunakan adalah Matrix Factorization, yang menguraikan matriks interaksi pengguna-item yang besar menjadi dua matriks laten (vektor embedding) yang lebih padat untuk pengguna dan item. Embedding ini menangkap fitur-fitur tersembunyi dari preferensi pengguna dan karakteristik film. Prediksi rating diestimasi dengan mengkalkulasi produk skalar (dot product) antara vektor laten pengguna dan film.
+
+**Teknik dan Parameter**
+
 1.  **FastAI: Neural Matrix Factorization**
-    -   **Teknik**: Menggunakan arsitektur *neural network* untuk menangkap hubungan non-linear yang kompleks antara preferensi pengguna dan karakteristik item.
+    -   **Teknik**: Model ini merupakan evolusi dari Matrix Factorization tradisional yang menggunakan arsitektur neural network untuk memodelkan interaksi antara vektor laten pengguna dan item. Pendekatan ini mampu menangkap hubungan non-linear yang lebih kompleks dalam data preferensi, yang sering kali tidak terdeteksi oleh metode konvensional.
     -   **Parameter**:
-        -   `embedding_dim`: 50
-        -   `epochs`: 5
-        -   `lr`: 5e-3 (0.005)
+        -   `embedding_dim`: 50, merepresentasikan setiap pengguna dan film dengan vektor 50-dimensi yang menangkap fitur-fitur laten mereka
+        -   `epochs`: 5,  jumlah siklus pelatihan penuh pada keseluruhan data latih
+        -   `lr`: 5e-3 (0.005), laju pembelajaran yang mengontrol kecepatan konvergensi model selama pelatihan
 
-2.  **Surprise (SVD): Singular Value Decomposition**
-    -   **Teknik**: Implementasi *Matrix Factorization* yang teroptimisasi untuk menguraikan matriks utilitas pengguna-item menjadi vektor laten.
-    -   **Parameter**:
-        -   `n_factors`: 100
-        -   `n_epochs`: 20
-        -   `lr_all`: 0.005
-        -   `reg_all`: 0.02 (Koefisien regularisasi L2 untuk mencegah *overfitting*).
 
-### 6.3 Hybrid Re-ranking
-Strategi ini menggabungkan output dari kedua model untuk menghasilkan rekomendasi akhir yang lebih akurat.
+**Hybrid Re-ranking**
 
-**Cara Kerja:**
-1.  **Generasi Kandidat**: Model *Collaborative Filtering* (FastAI) memprediksi rating untuk semua film yang belum ditonton pengguna, menghasilkan daftar kandidat awal.
-2.  **Seleksi Kandidat Teratas**: Sejumlah film dengan prediksi rating tertinggi dipilih.
-3.  **Kalkulasi Skor Kemiripan Konten**: Untuk setiap film kandidat, dihitung skor kemiripan genre (*Cosine Similarity*) terhadap film yang pernah diberi rating tinggi oleh pengguna.
-4.  **Kombinasi Berbobot dan Re-ranking**: Skor akhir dihitung menggunakan formula berbobot, lalu daftar kandidat diurutkan ulang berdasarkan skor hibrida ini.
+Strategi ini merupakan mekanisme final yang mengintegrasikan output dari kedua model untuk menghasilkan rekomendasi yang lebih akurat dan relevan secara personal.
+
+**Cara Kerja**
+
+- **Generasi Kandidat**: Model Collaborative Filtering (FastAI) digunakan untuk memprediksi rating pada semua film yang belum ditonton pengguna, sehingga menghasilkan daftar kandidat awal.
+- **Seleksi Kandidat Teratas**: Sejumlah film dengan prediksi rating tertinggi dari langkah sebelumnya dipilih untuk dipertimbangkan lebih lanjut.
+- **Kalkulasi Skor Kemiripan Konten**: Untuk setiap film kandidat, dihitung skor kemiripan genre (Cosine Similarity) terhadap film-film yang pernah diberi rating tinggi oleh pengguna (seed movies).
+- **Kombinasi Berbobot dan Re-ranking**: Skor akhir dihitung menggunakan formula berbobot untuk menyeimbangkan pengaruh kedua model. Daftar kandidat kemudian diurutkan ulang (re-ranked) berdasarkan skor hibrida ini.
+    
     > Skor Hibrida = (0.6 × Skor_Prediksi_CF) + (0.4 × Skor_Kemiripan_Konten)
+
+
+### 6.2 Result
+Berikut adalah contoh hasil akhir untuk pengguna dengan ID 197. Daftar ini diurutkan berdasarkan hybrid_score, yang merupakan gabungan dari skor prediksi Collaborative Filtering (bobot 0.6) dan skor kemiripan konten (Content-Based) (bobot 0.4).
+
+**Penjelasan masing masing variabel kelas**
+1. **Judul Film** : Hasil Top 10 film yang direkomendasikan dan diurutkan berdasarkan hybrid_score tertinggi.
+2. **hybrid_score** : Ini adalah skor akhir yang digunakan untuk mengurutkan rekomendasi. Skor ini dihitung dengan menggabungkan 'predicted_rating' dan 'content_sim_score' menggunakan formula berbobot:
+
+    > (0.6 * predicted_rating) + (0.4 * content_sim_score * 5)
+
+Tujuannya adalah untuk menyeimbangkan antara popularitas film di kalangan pengguna serupa (dari Collaborative Filtering) dan relevansi personal berdasarkan selera eksplisit pengguna (dari Content-Based).
+
+3. **predicted_rating** : Skor ini adalah hasil murni dari model **Collaborative Filtering (FastAI)**. Ini merupakan estimasi rating (dalam skala 0.5 hingga 5.5) yang diprediksi akan diberikan oleh seorang pengguna pada film yang belum pernah ia tonton. Nilai ini dihitung berdasarkan pola preferensi tersembunyi (latent features) yang dipelajari dari riwayat rating seluruh komunitas pengguna. Singkatnya, skor ini menjawab pertanyaan: "Seberapa besar kemungkinan pengguna ini akan menyukai film ini, berdasarkan selera orang-orang yang mirip dengannya?".
+4. **content_sim_score** : Skor ini berasal dari model **Content-Based Filtering**. Ini adalah ukuran kemiripan genre (menggunakan Cosine Similarity) antara sebuah film kandidat dengan film "benih" (seed movie), yaitu film yang pernah diberi rating sangat tinggi oleh pengguna. Skornya berkisar dari 0 hingga 1.
+
+    - Skor 1.0: Menandakan bahwa film kandidat memiliki profil genre yang sangat mirip atau identik dengan film yang disukai pengguna.
+
+    - Skor 0.0: Menandakan tidak ada kesamaan genre sama sekali.
+
+    - Skor ini menjawab pertanyaan: "Seberapa mirip film ini secara tematis dengan film yang sudah pasti disukai oleh pengguna?".
+
+**Analisis Hasil Top 10 Rekomendasi pada Pengguna 197**
+
+Hal yang menarik dari hasil ini adalah semua film dalam daftar top 10 memiliki content_sim_score sebesar 1.0. Ini menunjukkan cara kerja sistem hibrida Anda secara efektif:
+
+1. Sistem pertama-tama menyaring film-film yang secara genre sangat relevan dengan selera pengguna (memiliki kemiripan konten maksimal).
+
+2. Dari kelompok film yang sudah relevan tersebut, sistem kemudian mengurutkannya berdasarkan predicted_rating dari model Collaborative Filtering.
+
+Dengan kata lain, hasil akhir ini merekomendasikan film-film yang paling mungkin disukai oleh komunitas pengguna serupa, namun hanya dari pilihan film yang secara tematis sudah dipastikan cocok dengan selera pribadi pengguna tersebut.
+
 
 ---
 
