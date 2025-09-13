@@ -6,7 +6,7 @@
 
 Proyek ini berfokus pada pembangunan dan evaluasi sistem rekomendasi film menggunakan dataset **MovieLens 100k**. Metodologi yang diterapkan adalah pendekatan hibrida, yang menggabungkan keunggulan dari model **Content-based Filtering** dan **Collaborative Filtering**. Model Content-based memanfaatkan metadata film seperti genre untuk merekomendasikan item serupa, sementara model Collaborative menganalisis pola perilaku pengguna (riwayat rating) untuk menemukan preferensi tersembunyi.
 
-Pengujian model dilakukan dengan metrik **Root Mean Squared Error (RMSE)** untuk akurasi prediksi serta **Precision@k** dan **Recall@k** untuk mengukur relevansi rekomendasi teratas. Laporan ini merinci setiap tahapan, mulai dari pemuatan data, eksplorasi, pembangunan model, hingga analisis hasil dan implikasi bisnis.
+Pengujian model dilakukan dengan metrik  **Precision@k** dan **Recall@k** untuk mengukur relevansi rekomendasi teratas. Laporan ini merinci setiap tahapan, mulai dari pemuatan data, eksplorasi, pembangunan model, hingga analisis hasil dan implikasi bisnis.
 
 ---
 
@@ -47,7 +47,7 @@ Tujuan utama proyek ini adalah membangun sistem rekomendasi film yang dapat meni
 **Tujuan Teknis:**
 1.  Mengembangkan sistem rekomendasi hibrida (Content-based + Collaborative Filtering) yang dapat menghasilkan daftar rekomendasi film yang relevan.
 2.  Menyediakan *top-N recommendation* sebagai output yang dapat dievaluasi berdasarkan metrik standar.
-3.  Mengevaluasi performa sistem menggunakan metrik **RMSE**, **Precision@k**, dan **Recall@k**.
+3.  Mengevaluasi performa sistem menggunakan metrik **Precision@k**, dan **Recall@k**.
 
 **Manfaat Langsung:**
 * **Peningkatan Retensi Pengguna**: Pengguna yang merasa platform memahami selera mereka cenderung akan kembali lagi.
