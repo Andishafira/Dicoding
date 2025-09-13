@@ -209,6 +209,9 @@ Strategi ini merupakan mekanisme final yang mengintegrasikan output dari kedua m
 ### 6.2 Result
 Berikut adalah contoh hasil akhir untuk pengguna dengan ID 197. Daftar ini diurutkan berdasarkan hybrid_score, yang merupakan gabungan dari skor prediksi Collaborative Filtering (bobot 0.6) dan skor kemiripan konten (Content-Based) (bobot 0.4).
 
+![Result](https://github.com/Andishafira/Dicoding/main/Belajar%20Machine%20Learning%20Terapan/Tugas%202_Sistem%20Rekomendasi/Result.png)
+
+
 **Penjelasan masing masing variabel kelas**
 1. **Judul Film** : Hasil Top 10 film yang direkomendasikan dan diurutkan berdasarkan hybrid_score tertinggi.
 2. **hybrid_score** : Ini adalah skor akhir yang digunakan untuk mengurutkan rekomendasi. Skor ini dihitung dengan menggabungkan 'predicted_rating' dan 'content_sim_score' menggunakan formula berbobot:
