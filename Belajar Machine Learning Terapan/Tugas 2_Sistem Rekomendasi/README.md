@@ -250,7 +250,7 @@ Proses evaluasi dilakukan dengan membuat fungsi bernama evaluate_hybrid_recommen
 
 ### Metrik yang Digunakan
 
-    Kinerja model diukur menggunakan dua metrik standar dalam sistem rekomendasi, yaitu Precision@k dan Recall@k, dengan nilai k=10.
+Kinerja model diukur menggunakan dua metrik standar dalam sistem rekomendasi, yaitu Precision@k dan Recall@k, dengan nilai k=10.
     
 1.  **Precision@k**
 
