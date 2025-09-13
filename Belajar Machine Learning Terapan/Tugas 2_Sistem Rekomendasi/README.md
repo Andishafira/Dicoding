@@ -233,12 +233,15 @@ $$
 
 Film dianggap "relevan" jika pengguna memberikan rating 4.0 atau lebih tinggi pada film tersebut dalam data uji.
 
-### Hasil Evaluasi
+### Hasil Evaluasi Metode Hibrida
 Setelah dilakukan pengujian pada sampel pengguna dari data uji, model hibrida menghasilkan skor performa sebagai berikut:
 -   **Rata-rata Precision@10**: **0.0380** (hanya sekitar 3.8% dari 10 rekomendasi teratas yang relevan).
 -   **Rata-rata Recall@10**: **0.0285** (sistem hanya berhasil menemukan 2.85% dari total film relevan bagi pengguna).
 
 Hasil ini menunjukkan bahwa kinerja model masih tergolong sangat rendah. Nilai Precision 3.8% mengindikasikan bahwa, rata-rata, dari 10 film yang direkomendasikan, kurang dari satu film yang benar-benar relevan bagi pengguna. Sementara itu, nilai Recall 2.85% menunjukkan bahwa sistem gagal menemukan sebagian besar film yang seharusnya disukai oleh pengguna.
+
+### Perbandingan dengan metode content-based filtering murni dan collaborative filtering murni
+
 
 ### Analisis Kualitatif dan Potensi Penyebab
 
