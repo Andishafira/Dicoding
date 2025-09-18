@@ -1,0 +1,11 @@
+Feature,Importance
+OverTime_Yes,0.6148814
+TotalWorkingYears,0.052007105
+YearsAtCompany,0.051448286
+EmployeeId,0.04480168
+Age,0.04469639
+DailyRate,0.04253538
+MonthlyIncome,0.04221174
+DistanceFromHome,0.038559906
+HourlyRate,0.03823276
+MonthlyRate,0.030625362
