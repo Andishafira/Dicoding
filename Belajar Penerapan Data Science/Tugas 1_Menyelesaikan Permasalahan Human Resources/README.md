@@ -10,9 +10,13 @@ Tingkat turnover yang kronis ini menimbulkan dampak negatif berlapis yang signif
 
 Menghadapi situasi ini, Manajemen HR di Jaya Jaya Maju menyadari urgensi untuk beralih dari strategi reaktif (hanya mengganti karyawan yang hilang) menjadi pendekatan proaktif yang berbasis data. Terdapat kebutuhan mendesak untuk tidak hanya memahami faktor-faktor fundamental penyebab attrition, tetapi juga untuk mengembangkan sebuah model prediktif yang andal. Tujuan utamanya adalah untuk mengidentifikasi karyawan berisiko tinggi secara dini, sehingga memungkinkan perusahaan menyusun strategi intervensi yang tepat sasaran, meningkatkan retensi talenta kunci, dan pada akhirnya mengurangi attrition rate ke tingkat yang lebih sehat dan berkelanjutan secara finansial.
 
+---
+
 ### Permasalahan Bisnis
 
 Permasalahan bisnis fundamental yang dihadapi PT Jaya Jaya Maju adalah ketidakmampuan perusahaan untuk menanggulangi attrition rate yang telah mencapai 16,92% (berdasarkan analisis terhadap 1.058 karyawan yang valid), yang berakar pada kesenjangan informasi kritis. Secara spesifik, perusahaan belum dapat membedakan antara faktor-faktor yang memiliki dampak signifikan secara statistik dan yang hanya bersifat anekdotal. Terdapat ketidakpastian strategis mengenai seberapa besar pengaruh sebenarnya dari metrik finansial (seperti MonthlyIncome), faktor demografis (seperti Age dan MaritalStatus), dan indikator perilaku kerja (seperti OverTime yang berlebihan dan DistanceFromHome) terhadap probabilitas seorang karyawan untuk mengundurkan diri. Tanpa pemahaman mendalam mengenai pola-pola ini, setiap strategi retensi yang diterapkan berisiko salah sasaran dan tidak efisien secara biaya. Permasalahan ini diperburuk oleh ketiadaan alat bantu analitis yang memadai; manajemen HR saat ini tidak memiliki business dashboard terpusat untuk memantau indikator-indikator kunci attrition ini secara berkala. Ketiadaan infrastruktur pemantauan ini memaksa proses pengambilan keputusan menjadi reaktif—berfokus pada penggantian karyawan setelah mereka keluar—alih-alih proaktif, yang seharusnya memungkinkan intervensi dini sebelum turnover terjadi. Oleh karena itu, proyek ini esensial untuk menjembatani kesenjangan analitis tersebut dengan mengidentifikasi faktor penyebab secara presisi dan menyediakan alat untuk pemantauan berkelanjutan.
+
+---
 
 ### Cakupan Proyek
 
@@ -23,25 +27,18 @@ Permasalahan bisnis fundamental yang dihadapi PT Jaya Jaya Maju adalah ketidakma
 5. **Optimasi Model**: Menangani tantangan dataset yang sangat tidak seimbang (hanya 16,9% kelas positif) dengan menggunakan teknik hyperparameter tuning melalui RandomizedSearchCV, yang dioptimalkan secara spesifik untuk F1-Score guna menyeimbangkan Precision dan Recall.
 6. **Visualisasi Dashboard**: Menyajikan temuan-temuan kunci dan KPI dalam sebuah dashboard bisnis.
 
+---
+
 ### Persiapan
 
-Sumber data: 
+Sumber data: https://github.com/dicodingacademy/dicoding_dataset/tree/main/employee
 
-Setup environment:
+1. Instalasi requirements yang dibutuhkan. Kebutuhan requirements tersedia dalam file requirements.txt
+2. Jalankan file Tugas_1_HR.ipynb
+3. Buka dashboard menggunakan link berikut :
+https://lookerstudio.google.com/reporting/2797f7b8-fccd-48ab-844d-6b84d36af205
 
-```
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pickle
-from sklearn.model_selection import train_test_split, RandomizedSearchCV
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import classification_report, confusion_matrix
-from xgboost import XGBClassifier
-from imblearn.over_sampling import SMOTE
-from scipy.stats import chi2_contingency
-```
+---
 
 ## Business Dashboard
 
@@ -51,6 +48,8 @@ Analisis visual utama dari dashboard meliputi:
 1. Persebaran Attrition berdasarkan Departemen: Jumlah absolut karyawan yang keluar tertinggi berasal dari departemen Research & Development, diikuti oleh departemen Sales.
 2. Persebaran Attrition berdasarkan Posisi (JobRole): Peran pekerjaan dengan jumlah attrition tertinggi secara absolut adalah Sales Executive, Research Scientist, dan Laboratory Technician. Analisis lebih dalam di notebook juga mengonfirmasi bahwa secara proporsional, Sales Representative memiliki risiko keluar tertinggi.
 3. Risiko vs. Pendapatan (MonthlyIncome): Dashboard menyajikan grafik sebar (scatter plot) yang secara jelas memvisualisasikan korelasi negatif antara pendapatan dan risiko attrition. Karyawan dengan probabilitas risiko tinggi (ditandai oranye) terkonsentrasi secara signifikan pada rentang pendapatan bulanan yang lebih rendah. Temuan ini didukung penuh oleh analisis boxplot dalam notebook, yang menunjukkan bahwa median gaji karyawan yang keluar (1) jauh lebih rendah daripada mereka yang bertahan (0).
+
+---
 
 ## Conclusion
 
@@ -67,6 +66,7 @@ Temuan terpenting dari analisis ini adalah faktor-faktor prediktor utama yang me
 4. TotalWorkingYears (Total Tahun Bekerja)
 5. DistanceFromHome (Jarak dari Rumah)
 
+---
 
 ### Rekomendasi Action Items (Optional)
 
