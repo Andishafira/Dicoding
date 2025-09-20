@@ -87,7 +87,7 @@ Setelah ketiga langkah ini selesai, lingkungan telah siap. Anda dapat melanjutka
 
 Bussiness Dashboard dibuat menggunakan Google Looker Studio dan dapat diakses online menggunakan link : https://lookerstudio.google.com/reporting/3418ee20-b0bb-4347-9e83-2389bed4e706
 
-![Dashboard](https://raw.githubusercontent.com/Andishafira/Dicoding/main/Belajar_Penerapan_Data_Science/Tugas_2_Menyelesaikan_Permasalahan_Institusi_Pendidikan/Dashboard/screencapture-lookerstudio-google-reporting-3418ee20-b0bb-4347-9e83-2389bed4e706-page-savYF-edit-2025-09-20-13_05_16.png)
+![Dashboard](https://raw.githubusercontent.com/Andishafira/Dicoding/main/Belajar_Penerapan_Data_Science/Tugas_2_Menyelesaikan_Permasalahan_Institusi_Pendidikan/Dashboard/Andisha-Dashboard.png)
 
 
 Dashboard ini menyajikan gambaran umum (snapshot) mengenai status akademik mahasiswa di Universitas Jaya, dengan fokus utama untuk memahami faktor-faktor yang berkaitan dengan kelulusan (Graduate) dan putus studi (Dropout). Dashboard ini dibuat menggunakan dataset yang telah didecoding sehingga lebih mudah dibaca dan dimengerti. 
