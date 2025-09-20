@@ -1,0 +1,11 @@
+Feature,Importance
+Curricular_units_2nd_sem_approved,0.3430225850501117
+Curricular_units_1st_sem_approved,0.21124791253897157
+Curricular_units_2nd_sem_grade,0.1632884356722938
+Tuition_fees_up_to_date,0.08864784448745129
+Curricular_units_1st_sem_grade,0.07547528875911409
+Age_at_enrollment,0.039217928390707174
+Application_mode,0.027779729696361243
+Scholarship_holder,0.025477115563824686
+Debtor,0.017055610127857952
+Gender,0.008787549713306551
