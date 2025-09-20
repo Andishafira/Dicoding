@@ -1,5 +1,7 @@
 import streamlit as st
+from preprocessing import data_preprocessing, encoder_Application_mode, encoder_Debtor, encoder_Gender, encoder_Scholarship_holder, encoder_Tuition_fees_up_to_date
 import pandas as pd
+from prediction import prediction
 
 st.set_page_config(layout="wide")
 
@@ -10,23 +12,23 @@ data = pd.DataFrame()
 col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
-    Application_mode = st.selectbox('Application mode', ['1st phase - general contingent', 'Ordinance No. 612/93', '1st phase - special contingent (Azores Island)'], index=None)
+    Application_mode = st.selectbox('Application mode', encoder_Application_mode.classes_, index=1)
     data['Application_mode'] = [Application_mode]
 
 with col2:
-    Debtor = st.selectbox('Debtor', ['yes', 'no'], index=1)
+    Debtor = st.selectbox('Debtor', encoder_Debtor.classes_, index=1)
     data['Debtor'] = [Debtor]
 
 with col3:
-    Tuition_fees_up_to_date = st.selectbox('Tuition fees up to date', ['yes', 'no'], index=None)
+    Tuition_fees_up_to_date = st.selectbox('Tuition fees up to date', encoder_Tuition_fees_up_to_date.classes_, index=None)
     data['Tuition_fees_up_to_date'] = [Tuition_fees_up_to_date]
 
 with col4:
-    Gender = st.selectbox('Gender', ['male', 'female'], index=None)
+    Gender = st.selectbox('Gender', encoder_Gender.classes_, index=None)
     data['Gender'] = [Gender]
 
 with col5:
-    Scholarship_holder = st.selectbox('Scholarship holder',['yes', 'no'], index=None)
+    Scholarship_holder = st.selectbox('Scholarship holder', encoder_Scholarship_holder.classes_, index=None)
     data['Scholarship_holder'] = [Scholarship_holder]
 
 col1, col2, col3, col4, col5 = st.columns(5)
@@ -52,6 +54,7 @@ with col5:
     data['Curricular_units_2nd_sem_grade'] = [Curricular_units_2nd_sem_grade]
 
 if st.button('Predict'):
-    new_data = data
+    clean_data = data_preprocessing(data=data)
+    result = prediction(clean_data)
     st.write("Results:")
-    st.write("Dropout")
+    st.write(result)
