@@ -1,78 +1,160 @@
-# Proyek Akhir: Menyelesaikan Permasalahan Perusahaan Edutech
+# Proyek Akhir: Menyelesaikan Permasalahan Institusi Pendidikan
 
 ## Business Understanding
 
+Institusi pendidikan (disebut sebagai Jaya University dalam nama file) menghadapi tantangan dalam mempertahankan mahasiswanya. Tingkat dropout yang tinggi tidak hanya berdampak pada finansial institusi tetapi juga pada reputasi akademisnya. Dengan memahami faktor-faktor kunci yang memengaruhi keberhasilan studi, institusi dapat secara proaktif mengidentifikasi mahasiswa yang berisiko dan memberikan intervensi yang tepat untuk mendukung mereka agar berhasil lulus.
+
 ### Latar Belakang Bisnis
 
-PT Jaya Jaya Maju, sebuah perusahaan multinasional yang beroperasi sejak tahun 2000, telah mencapai skala operasional yang impresif dengan lebih dari 1.000 karyawan tersebar di berbagai wilayah. Walaupun telah berkembang pesat, perusahaan menghadapi sebuah tantangan operasional kritis: tingkat attrition (pengunduran diri) karyawan yang sangat tinggi. Analisis data (merujuk pada 1.058 sampel karyawan yang valid dari dataset) mengungkap bahwa attrition rate aktual perusahaan telah mencapai 16,92%. Angka ini tidak hanya melebihi ambang batas wajar industri (sekitar 10%), tetapi juga menandakan adanya permasalahan sistemik dalam manajemen sumber daya manusia yang memerlukan investigasi mendalam.
-
-Tingkat turnover yang kronis ini menimbulkan dampak negatif berlapis yang signifikan bagi perusahaan. Pertama, terjadi eskalasi biaya rekrutmen dan pelatihan; setiap karyawan yang keluar harus digantikan, memicu siklus biaya yang berkelanjutan untuk iklan lowongan, proses seleksi, onboarding, dan pelatihan hingga karyawan baru mencapai produktivitas penuh. Kedua, terjadi disrupsi operasional dan penurunan produktivitas tim. Lebih dari sekadar kehilangan tenaga kerja, perusahaan kehilangan intellectual capital dan pengalaman institusional. Analisis data mengonfirmasi bahwa risiko attrition tertinggi terkonsentrasi pada karyawan yang lebih muda dan memiliki masa kerja singkat (terutama 0-2 tahun, seperti yang ditunjukkan oleh visualisasi YearsAtCompany), yang berarti investasi onboarding perusahaan seringkali gagal memberikan laba atas investasi (ROI). Ketiga, terdapat indikasi kuat penurunan kepuasan dan engagement karyawan. Fitur-fitur dalam dataset seperti JobSatisfaction, WorkLifeBalance, dan EnvironmentSatisfaction adalah metrik vital. Data menunjukkan bahwa faktor-faktor seperti OverTime (lembur) memiliki korelasi yang sangat kuat dengan attrition, mengisyaratkan bahwa kelelahan (burnout) dan ketidakpuasan terhadap keseimbangan kerja-hidup kemungkinan besar berperan sebagai katalisator utama yang mendorong karyawan untuk mencari peluang di tempat lain.
-
-Menghadapi situasi ini, Manajemen HR di Jaya Jaya Maju menyadari urgensi untuk beralih dari strategi reaktif (hanya mengganti karyawan yang hilang) menjadi pendekatan proaktif yang berbasis data. Terdapat kebutuhan mendesak untuk tidak hanya memahami faktor-faktor fundamental penyebab attrition, tetapi juga untuk mengembangkan sebuah model prediktif yang andal. Tujuan utamanya adalah untuk mengidentifikasi karyawan berisiko tinggi secara dini, sehingga memungkinkan perusahaan menyusun strategi intervensi yang tepat sasaran, meningkatkan retensi talenta kunci, dan pada akhirnya mengurangi attrition rate ke tingkat yang lebih sehat dan berkelanjutan secara finansial.
+Institusi pendidikan (disebut sebagai Jaya University dalam nama file) menghadapi tantangan dalam mempertahankan mahasiswanya. Tingkat dropout yang tinggi tidak hanya berdampak pada finansial institusi tetapi juga pada reputasi akademisnya. Dengan memahami faktor-faktor kunci yang memengaruhi keberhasilan studi, institusi dapat secara proaktif mengidentifikasi mahasiswa yang berisiko dan memberikan intervensi yang tepat untuk mendukung mereka agar berhasil lulus.
 
 ---
 
 ### Permasalahan Bisnis
 
-Permasalahan bisnis fundamental yang dihadapi PT Jaya Jaya Maju adalah ketidakmampuan perusahaan untuk menanggulangi attrition rate yang telah mencapai 16,92% (berdasarkan analisis terhadap 1.058 karyawan yang valid), yang berakar pada kesenjangan informasi kritis. Secara spesifik, perusahaan belum dapat membedakan antara faktor-faktor yang memiliki dampak signifikan secara statistik dan yang hanya bersifat anekdotal. Terdapat ketidakpastian strategis mengenai seberapa besar pengaruh sebenarnya dari metrik finansial (seperti MonthlyIncome), faktor demografis (seperti Age dan MaritalStatus), dan indikator perilaku kerja (seperti OverTime yang berlebihan dan DistanceFromHome) terhadap probabilitas seorang karyawan untuk mengundurkan diri. Tanpa pemahaman mendalam mengenai pola-pola ini, setiap strategi retensi yang diterapkan berisiko salah sasaran dan tidak efisien secara biaya. Permasalahan ini diperburuk oleh ketiadaan alat bantu analitis yang memadai; manajemen HR saat ini tidak memiliki business dashboard terpusat untuk memantau indikator-indikator kunci attrition ini secara berkala. Ketiadaan infrastruktur pemantauan ini memaksa proses pengambilan keputusan menjadi reaktif—berfokus pada penggantian karyawan setelah mereka keluar—alih-alih proaktif, yang seharusnya memungkinkan intervensi dini sebelum turnover terjadi. Oleh karena itu, proyek ini esensial untuk menjembatani kesenjangan analitis tersebut dengan mengidentifikasi faktor penyebab secara presisi dan menyediakan alat untuk pemantauan berkelanjutan.
+Permasalahan utama adalah untuk mengidentifikasi faktor-faktor penentu yang membedakan antara mahasiswa yang berhasil "Lulus" (Graduate) dan yang "Putus Studi" (Dropout). Institusi perlu membangun sebuah sistem prediktif untuk menandai mahasiswa yang berisiko dropout sedini mungkin, sehingga sumber daya pendukung akademik dan non-akademik dapat dialokasikan secara efektif.
 
 ---
 
 ### Cakupan Proyek
 
-1. **Pembersihan dan Persiapan Data**: Memuat dataset mentah (employee_data.csv), menangani nilai yang hilang (ditemukan 412 nilai NaN pada kolom target 'Attrition' yang kemudian dihilangkan), dan menghapus fitur-fitur konstan yang tidak memberikan nilai prediktif (seperti 'EmployeeCount', 'Over18', dll.).
-2. **Analisis Data Eksploratif (EDA)**: Melakukan analisis statistik dan visualisasi untuk mengidentifikasi pola terkait attrition. Ini termasuk analisis bivariat antara fitur (seperti MonthlyIncome, Age, OverTime, MaritalStatus) dan target Attrition.
-3. **Pengujian Statistik**: Menjalankan uji Chi-Square untuk memvalidasi secara statistik hubungan antara fitur kategorikal dan attrition.
-4. **Pengembangan Model**: Membangun model machine learning menggunakan XGBClassifier untuk memprediksi probabilitas attrition.
-5. **Optimasi Model**: Menangani tantangan dataset yang sangat tidak seimbang (hanya 16,9% kelas positif) dengan menggunakan teknik hyperparameter tuning melalui RandomizedSearchCV, yang dioptimalkan secara spesifik untuk F1-Score guna menyeimbangkan Precision dan Recall.
-6. **Visualisasi Dashboard**: Menyajikan temuan-temuan kunci dan KPI dalam sebuah dashboard bisnis.
+Cakupan proyek ini meliputi:
+
+1. **Analisis Data Eksploratif (EDA)**: Untuk memahami data demografis, akademik, dan sosio-ekonomi mahasiswa serta hubungannya dengan status kelulusan.
+2. **Pemrosesan Data**: Membersihkan data, melakukan feature selection, scaling pada fitur numerik, dan encoding pada fitur kategorikal.
+   
+3. **Pengembangan Model**: Membangun model klasifikasi machine learning (Random Forest) untuk memprediksi status akhir mahasiswa (Lulus atau Dropout).
+4. **Pengembangan Model**: Membangun model klasifikasi machine learning (Random Forest) untuk memprediksi status akhir mahasiswa (Lulus atau Dropout).
+5. **Evaluasi Model**: Mengevaluasi kinerja model menggunakan metrik seperti akurasi, presisi, recall, dan F1-score.
+6. **Deployment** : Membuat prototipe aplikasi web interaktif menggunakan Streamlit untuk mempermudah penggunaan model prediksi
+7. **Visualisasi Dashboard**: Menyajikan temuan-temuan kunci dan KPI dalam sebuah dashboard bisnis.
 
 ---
 
 ### Persiapan
 
-Sumber data: https://github.com/dicodingacademy/dicoding_dataset/tree/main/employee
+**Sumber Data :**
+Dataset diambil dari repositori GitHub dan dimuat ke dalam dataframe dengan sumber data: https://github.com/dicodingacademy/dicoding_dataset/tree/main/students_performance
 
-1. Instalasi requirements yang dibutuhkan. Kebutuhan requirements tersedia dalam file requirements.txt
-2. Jalankan file Tugas_1_HR.ipynb
-3. Buka dashboard menggunakan link berikut :
-https://lookerstudio.google.com/reporting/2797f7b8-fccd-48ab-844d-6b84d36af205
+**Setup Environment :**
+Kebutuhan requirements untuk menjalankan program IPYNB tersedia dalam file requirements_ipynb.txt. Kemudian, untuk melakukan deployment, kebutuhan requirements tersedia dalam file requirements.txt.
 
 ---
 
 ## Business Dashboard
 
-Dashboard visualisasi (Laporan_Tanpa_Judul.pdf) merangkum temuan-temuan utama yang dihadapi bisnis. Dashboard ini menggunakan dataset yang telah dibersihkan yang terdiri dari 1.058 karyawan, di mana 179 di antaranya telah mengundurkan diri, menghasilkan Attrition Rate sebesar 16,92%.
+Bussiness Dashboard dibuat menggunakan Google Looker Studio dan dapat diakses online menggunakan link : https://lookerstudio.google.com/reporting/3418ee20-b0bb-4347-9e83-2389bed4e706
+
+Dashboard ini menyajikan gambaran umum (snapshot) mengenai status akademik mahasiswa di Universitas Jaya, dengan fokus utama untuk memahami faktor-faktor yang berkaitan dengan kelulusan (Graduate) dan putus studi (Dropout). Dashboard ini dibuat menggunakan dataset yang telah didecoding sehingga lebih mudah dibaca dan dimengerti. 
+
+**Ringkasan KPI (Gambaran Umum)**
+Panel KPI di bagian atas memberikan konteks utama:
+
+  * Total Mahasiswa: Terdapat 4.420 mahasiswa dalam dataset ini.
+
+  * Status Utama: Dari total tersebut, 2.210 (50.0%) telah Lulus, 1.420 (32.1%) telah Putus Studi (Dropout), dan 794 (17.9%) masih Terdaftar (Enrolled).
+
+  * Permasalahan Utama: Angka Dropout Rate sebesar 32.1% sangat signifikan dan menjadi masalah utama yang perlu diinvestigasi. Ini menunjukkan bahwa hampir sepertiga dari mahasiswa gagal menyelesaikan studi mereka.
+
+Artinya, dari total populasi mahasiswa, hampir setengah berhasil lulus, sepertiga mengalami dropout, dan sisanya masih berstatus aktif/enrolled
 
 Analisis visual utama dari dashboard meliputi:
-1. Persebaran Attrition berdasarkan Departemen: Jumlah absolut karyawan yang keluar tertinggi berasal dari departemen Research & Development, diikuti oleh departemen Sales.
-2. Persebaran Attrition berdasarkan Posisi (JobRole): Peran pekerjaan dengan jumlah attrition tertinggi secara absolut adalah Sales Executive, Research Scientist, dan Laboratory Technician. Analisis lebih dalam di notebook juga mengonfirmasi bahwa secara proporsional, Sales Representative memiliki risiko keluar tertinggi.
-3. Risiko vs. Pendapatan (MonthlyIncome): Dashboard menyajikan grafik sebar (scatter plot) yang secara jelas memvisualisasikan korelasi negatif antara pendapatan dan risiko attrition. Karyawan dengan probabilitas risiko tinggi (ditandai oranye) terkonsentrasi secara signifikan pada rentang pendapatan bulanan yang lebih rendah. Temuan ini didukung penuh oleh analisis boxplot dalam notebook, yang menunjukkan bahwa median gaji karyawan yang keluar (1) jauh lebih rendah daripada mereka yang bertahan (0).
+1. **Distribusi Status Mahasiswa (pie chart)**
+
+Grafik ini memvisualisasikan proporsi dari tiga status mahasiswa.
+
+  * Lulus (49,9%): Setengah dari populasi mahasiswa dalam data ini berhasil lulus.
+
+  * Dropout (32.1%): Cukup tinggi, lebih dari 3 mahasiswa dari 10 berhenti di tengah jalan.
+
+  * Terdaftar (17.9%): Ini adalah kelompok minoritas, mahasiswa yang masih aktif menjalani studi.
+
+Insight: Tingginya dropout rate (32%) menunjukkan adanya masalah signifikan pada keberlangsungan studi mahasiswa.
+
+2. **Distribusi Dropout Berdasarkan Jurusan**
+Jurusan dengan dropout terbanyak:
+
+  1.  Management (Evening)
+  2.  Management (Reguler)
+  3.  Nursing
+  4.  Journalism and Communication
+
+Insight:
+Jurusan manajemen (baik reguler maupun kelas malam) dan keperawatan memiliki jumlah dropout tinggi. Hal ini bisa terkait faktor beban akademik, biaya, atau kurangnya dukungan belajar. Jurusan-jurusan dengan orientasi praktik tinggi (Nursing, Tourism, Journalism) juga rentan dropout.
+
+3. **Distribusi Lulusan Berdasarkan Jurusan**
+
+   Jurusan dengan lulusan terbanyak:
+    1. Nursing (hampir 600 lulusan)
+    2. Social Service
+    3. Journalism and Communication
+    4. Veterinary Nursing
+    5. Management
+Insight:
+Meski memiliki dropout tinggi, Nursing tetap menghasilkan jumlah lulusan terbanyak, menunjukkan daya tarik jurusan ini kuat meskipun tingkat kesulitan juga tinggi.
+
+4. **Faktor yang Mempengaruhi Dropout**
+
+Variabel paling berpengaruh:
+  * Curricular Units Semester 2
+
+  * Curricular Units Semester 1
+
+  * Tuition Fees Up to Date
+
+  * Age at Enrollment
+
+  * Application Mode
+
+**Insight:**
+
+  * Nilai akademik (semester 1 & 2) merupakan indikator paling besar terhadap dropout → mahasiswa dengan nilai rendah berisiko tinggi keluar.
+
+  * Masalah keuangan (tuition fees) juga krusial → mahasiswa dengan keterlambatan pembayaran lebih rentan dropout.
+
+  * Faktor demografis (usia saat masuk, jalur pendaftaran) berperan, meski lebih kecil.
+
+5. **Rata-Rata Nilai Akademik Berdasarkan Status**
+
+**Insight:**
+
+  * Lulusan memiliki nilai jauh lebih tinggi dibanding yang dropout.
+
+  * Mahasiswa yang dropout mengalami penurunan nilai signifikan dari semester 1 ke semester 2 → mengindikasikan kesulitan akademik yang makin berat.
+
+  * Mahasiswa yang masih aktif (enrolled) berada di tengah-tengah, masih punya peluang lulus jika performa akademik meningkat.
+
+**Kesimpulan Analisis Keseluruhan Laporan Dashboard Visualisasi**
+
+1. Dropout Rate Tinggi (32%) → hampir 1 dari 3 mahasiswa tidak menyelesaikan studi, ini angka yang cukup kritis untuk kualitas pendidikan.
+2. Faktor Akademik adalah Penentu Utama → nilai semester 1 & 2 menjadi indikator dropout terbesar, mahasiswa yang gagal adaptasi sejak awal kuliah sangat berisiko keluar.
+3. Masalah Finansial Memperburuk Risiko Dropout → keterlambatan pembayaran biaya kuliah turut memengaruhi keberlangsungan studi.
+4. Jurusan dengan Tingkat Dropout Tinggi → terutama Manajemen dan Keperawatan, perlu intervensi khusus seperti bimbingan akademik, konseling, atau dukungan finansial.
+5. Nilai Mahasiswa Dropout Sangat Rendah → menunjukkan pola gagal adaptasi akademik, mungkin karena metode pengajaran, beban studi terlalu berat, atau kurangnya support sistem.
 
 ---
 
 ## Conclusion
 
-Proyek ini berhasil mengidentifikasi faktor-faktor pendorong utama attrition karyawan di PT Jaya Jaya Jaya dan membangun model prediktif XGBoost yang telah dioptimalkan. Tantangan utama dataset adalah ketidakseimbangan kelas yang parah (16,92% kelas positif), yang ditangani dengan mengoptimalkan model secara spesifik untuk F1-Score selama proses RandomizedSearchCV. Model final yang telah di-tuning mencapai kinerja yang solid untuk dataset yang tidak seimbang, dengan hasil pada data uji sebagai berikut:
+Model machine learning (Random Forest Classifier) berhasil dikembangkan untuk memprediksi status kelulusan mahasiswa dengan akurasi 88.84% pada data uji.
 
-* F1-Score (Kelas 1): 0.53
-* Recall (Kelas 1): 0.44 (Model ini berhasil mengidentifikasi 44% dari semua karyawan yang sebenarnya akan keluar).
-* Precision (Kelas 1): 0.67 (Dari semua karyawan yang diprediksi model akan keluar, 67% di antaranya adalah prediksi yang benar).
+* Kinerja Model: Model menunjukkan kinerja yang baik, terutama dalam mengidentifikasi mahasiswa yang akan "Lulus" (Recall 0.93) dan cukup baik dalam mendeteksi mahasiswa yang berisiko "Dropout" (Recall 0.82).
 
-Temuan terpenting dari analisis ini adalah faktor-faktor prediktor utama yang memengaruhi keputusan seorang karyawan untuk keluar, yang diekstraksi dari model XGBoost final. Faktor-faktor tersebut diurutkan berdasarkan tingkat kepentingannya:
-1. MonthlyIncome (Pendapatan Bulanan)
-2. OverTime_Yes (Bekerja Lembur)
-3. Age (Usia)
-4. TotalWorkingYears (Total Tahun Bekerja)
-5. DistanceFromHome (Jarak dari Rumah)
+* Faktor Prediktif Utama: Analisis feature importance menunjukkan bahwa faktor akademik adalah prediktor terkuat. Fitur-fitur seperti:
+
+  1. 'Curricular_units_2nd_sem_approved' (Jumlah mata kuliah lulus di semester 2)
+  2. 'Curricular_units_1st_sem_approved' (Jumlah mata kuliah lulus di semester 1)
+  3. 'Curricular_units_2nd_sem_grade' (Rata-rata nilai semester 2)
+  4. 'Curricular_units_1st_sem_grade' (Rata-rata nilai semester 1)
+
+* Faktor finansial, seperti Tuition_fees_up_to_date (Status pembayaran UKT), juga terbukti menjadi prediktor penting.
 
 ---
 
-### Rekomendasi Action Items (Optional)
+### Rekomendasi Action Items
 
-Berdasarkan temuan berbasis data di atas, berikut adalah rekomendasi tindakan yang dapat ditindaklanjuti untuk mengurangi attrition:
+Berdasarkan temuan tersebut, berikut adalah beberapa rekomendasi untuk institusi:
 
-- Prioritaskan Tinjauan Kompensasi: Mengingat MonthlyIncome adalah prediktor #1, lakukan tinjauan struktur gaji yang kompetitif, terutama untuk karyawan di level awal dan dalam peran berisiko tinggi (seperti Sales Representative) yang berada di kuartil pendapatan bawah.
-- Investigasi Budaya Lembur: OverTime adalah prediktor #2. Manajemen harus menyelidiki penyebab utama tingginya permintaan lembur. Ini adalah indikator kuat dari kelelahan (burnout) dan harus segera ditangani, baik melalui alokasi sumber daya yang lebih baik, perbaikan proses, atau kompensasi lembur yang lebih adil.
-- Fokus pada Retensi Karyawan Muda/Baru: Prediktor #3 (Age) dan #4 (TotalWorkingYears), serta temuan EDA pada YearsAtCompany, menunjukkan bahwa karyawan yang lebih muda dan yang baru bergabung (0-2 tahun) adalah yang paling rentan. Kembangkan program retensi yang ditargetkan untuk demografi ini, seperti program mentoring yang kuat, jalur karier yang jelas, dan peningkatan engagement selama proses onboarding.
-- Terapkan Model Prediktif: Gunakan model XGBoost yang telah dibangun ini untuk secara proaktif menandai karyawan aktif yang memiliki profil risiko tinggi. Tim HR dapat menggunakan daftar ini untuk melakukan intervensi pencegahan, seperti "stay interview" (wawancara retensi), untuk memahami dan mengatasi kekhawatiran spesifik mereka sebelum mereka memutuskan untuk mengundurkan diri.
+- Implementasi Sistem Peringatan Dini: Institusi harus menggunakan aplikasi prediktif (seperti prototipe Streamlit yang dibuat) untuk secara otomatis menandai mahasiswa yang menunjukkan kinerja akademik di bawah rata-rata pada semester 1 dan 2. Mahasiswa ini harus segera mendapatkan bimbingan akademik intensif.
+- Intervensi Finansial Proaktif: Mengingat Tuition_fees_up_to_date adalah faktor penting, bagian administrasi keuangan harus proaktif menghubungi mahasiswa yang memiliki tunggakan (tetapi belum berstatus Debtor) untuk menawarkan skema pembayaran yang fleksibel atau bantuan keuangan, guna mencegah mereka dropout karena alasan finansial.
+- Fokus pada Keterlibatan Semester Awal: Keberhasilan di dua semester pertama sangat krusial. Institusi disarankan memperkuat program orientasi dan program mentoring antar-mahasiswa (senior-junior) untuk membantu mahasiswa baru beradaptasi dan berhasil secara akademik di tahun pertama mereka.
