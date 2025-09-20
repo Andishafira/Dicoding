@@ -5,15 +5,15 @@ import joblib
 relative_path = './Belajar_Penerapan_Data_Science/Tugas_2_Menyelesaikan_Permasalahan_Institusi_Pendidikan/'
 
 encoder_Application_mode = joblib.load(relative_path + "model/encoder_Application_mode.joblib")
-encoder_Debtor = joblib.load("model/encoder_Debtor.joblib")
-encoder_Gender = joblib.load("model/encoder_Gender.joblib")
-encoder_Scholarship_holder = joblib.load("model/encoder_Scholarship_holder.joblib")
-encoder_Tuition_fees_up_to_date = joblib.load("model/encoder_Tuition_fees_up_to_date.joblib")
-scaler_Age_at_enrollment = joblib.load("model/scaler_Age_at_enrollment.joblib")
-scaler_Curricular_units_1st_sem_approved = joblib.load("model/scaler_Curricular_units_1st_sem_approved.joblib")
-scaler_Curricular_units_1st_sem_grade = joblib.load("model/scaler_Curricular_units_1st_sem_grade.joblib")
-scaler_Curricular_units_2nd_sem_approved = joblib.load("model/scaler_Curricular_units_2nd_sem_approved.joblib")
-scaler_Curricular_units_2nd_sem_grade = joblib.load("model/scaler_Curricular_units_2nd_sem_grade.joblib")
+encoder_Debtor = joblib.load(relative_path + "model/encoder_Debtor.joblib")
+encoder_Gender = joblib.load(relative_path + "model/encoder_Gender.joblib")
+encoder_Scholarship_holder = joblib.load(relative_path + "model/encoder_Scholarship_holder.joblib")
+encoder_Tuition_fees_up_to_date = joblib.load(relative_path + "model/encoder_Tuition_fees_up_to_date.joblib")
+scaler_Age_at_enrollment = joblib.load(relative_path + "model/scaler_Age_at_enrollment.joblib")
+scaler_Curricular_units_1st_sem_approved = joblib.load(relative_path + "model/scaler_Curricular_units_1st_sem_approved.joblib")
+scaler_Curricular_units_1st_sem_grade = joblib.load(relative_path + "model/scaler_Curricular_units_1st_sem_grade.joblib")
+scaler_Curricular_units_2nd_sem_approved = joblib.load(relative_path + "model/scaler_Curricular_units_2nd_sem_approved.joblib")
+scaler_Curricular_units_2nd_sem_grade = joblib.load(relative_path + "model/scaler_Curricular_units_2nd_sem_grade.joblib")
 
 def data_preprocessing(data):
 

@@ -1,7 +1,9 @@
 import joblib
- 
-model = joblib.load("model/rdf_model.joblib")
-result_target = joblib.load("model/status_encoder.joblib")
+
+relative_path = './Belajar_Penerapan_Data_Science/Tugas_2_Menyelesaikan_Permasalahan_Institusi_Pendidikan/'
+
+model = joblib.load(relative_path + "model/rdf_model.joblib")
+result_target = joblib.load(relative_path + "model/status_encoder.joblib")
 
 def prediction(data):
     result = model.predict(data)
