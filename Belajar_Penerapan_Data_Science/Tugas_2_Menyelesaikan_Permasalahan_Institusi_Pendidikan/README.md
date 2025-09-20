@@ -141,6 +141,30 @@ Variabel paling berpengaruh:
 5. Nilai Mahasiswa Dropout Sangat Rendah → menunjukkan pola gagal adaptasi akademik, mungkin karena metode pengajaran, beban studi terlalu berat, atau kurangnya support sistem.
 
 ---
+## Menjalankan Sistem Machine Learning
+
+Prototipe sistem machine learning ini telah di-deploy sebagai aplikasi web interaktif menggunakan Streamlit. Proses training model asli dilakukan dalam notebook Jupyter (Tugas_2_Jaya_University_fix.ipynb), yang kemudian menyimpan model terlatih dan scaler/encoder sebagai file .joblib.
+
+Aplikasi Streamlit (app.py), dengan bantuan modul preprocessing.py dan prediction.py, kemudian memuat file-file ini untuk melakukan prediksi secara real-time berdasarkan input pengguna.
+
+**Cara Menjalankan Prototipe (Lokal):**
+
+1. Pastikan memiliki file app.py, preprocessing.py, prediction.py, dan semua file .joblib (model dan encoders/scalers) dalam satu direktori.
+
+2. Instal semua pustaka yang diperlukan (termasuk streamlit) dari file requirements.txt.
+
+3. Buka terminal atau command prompt, navigasi ke direktori tersebut, dan jalankan perintah:
+
+'''
+streamlit run app.py
+'''
+4. Aplikasi akan otomatis terbuka di browser Anda. Pengguna dapat memasukkan 10 fitur yang diperlukan di sidebar untuk mendapatkan prediksi status mahasiswa (Lulus atau Dropout).
+
+**Cara Menjalankan Prototipe (Online):**
+
+Akses link berikut : https://dicoding-student-performance-andi-shafira.streamlit.app/
+
+---
 
 ## Conclusion
 
