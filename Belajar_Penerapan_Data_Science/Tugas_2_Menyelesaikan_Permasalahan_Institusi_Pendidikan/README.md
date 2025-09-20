@@ -47,8 +47,9 @@ Bussiness Dashboard dibuat menggunakan Google Looker Studio dan dapat diakses on
 
 Dashboard ini menyajikan gambaran umum (snapshot) mengenai status akademik mahasiswa di Universitas Jaya, dengan fokus utama untuk memahami faktor-faktor yang berkaitan dengan kelulusan (Graduate) dan putus studi (Dropout). Dashboard ini dibuat menggunakan dataset yang telah didecoding sehingga lebih mudah dibaca dan dimengerti. 
 
-**Ringkasan KPI (Gambaran Umum)**
-Panel KPI di bagian atas memberikan konteks utama:
+1. **Statistik Utama**
+
+Panel di bagian atas memberikan informasi informasi penting yaitu:
 
   * Total Mahasiswa: Terdapat 4.420 mahasiswa dalam dataset ini.
 
@@ -56,10 +57,9 @@ Panel KPI di bagian atas memberikan konteks utama:
 
   * Permasalahan Utama: Angka Dropout Rate sebesar 32.1% sangat signifikan dan menjadi masalah utama yang perlu diinvestigasi. Ini menunjukkan bahwa hampir sepertiga dari mahasiswa gagal menyelesaikan studi mereka.
 
-Artinya, dari total populasi mahasiswa, hampir setengah berhasil lulus, sepertiga mengalami dropout, dan sisanya masih berstatus aktif/enrolled
+**Temuan** : dari total populasi mahasiswa, hampir setengah berhasil lulus, sepertiga mengalami dropout, dan sisanya masih berstatus aktif/enrolled
 
-Analisis visual utama dari dashboard meliputi:
-1. **Distribusi Status Mahasiswa (pie chart)**
+2. **Distribusi Status Mahasiswa (pie chart)**
 
 Grafik ini memvisualisasikan proporsi dari tiga status mahasiswa.
 
@@ -69,44 +69,49 @@ Grafik ini memvisualisasikan proporsi dari tiga status mahasiswa.
 
   * Terdaftar (17.9%): Ini adalah kelompok minoritas, mahasiswa yang masih aktif menjalani studi.
 
-Insight: Tingginya dropout rate (32%) menunjukkan adanya masalah signifikan pada keberlangsungan studi mahasiswa.
+**Temuan**: Tingginya dropout rate (32%) menunjukkan adanya masalah signifikan pada keberlangsungan studi mahasiswa.
 
-2. **Distribusi Dropout Berdasarkan Jurusan**
+3. **Distribusi Dropout Berdasarkan Jurusan**
 Jurusan dengan dropout terbanyak:
 
-  1.  Management (Evening)
-  2.  Management (Reguler)
-  3.  Nursing
-  4.  Journalism and Communication
+   - Management (Evening)
+   - Management (Reguler)
+   - Nursing
+   - Journalism and Communication
 
-Insight:
+**Temuan**:
+
 Jurusan manajemen (baik reguler maupun kelas malam) dan keperawatan memiliki jumlah dropout tinggi. Hal ini bisa terkait faktor beban akademik, biaya, atau kurangnya dukungan belajar. Jurusan-jurusan dengan orientasi praktik tinggi (Nursing, Tourism, Journalism) juga rentan dropout.
 
-3. **Distribusi Lulusan Berdasarkan Jurusan**
+4. **Distribusi Lulusan Berdasarkan Jurusan**
 
    Jurusan dengan lulusan terbanyak:
-    1. Nursing (hampir 600 lulusan)
-    2. Social Service
-    3. Journalism and Communication
-    4. Veterinary Nursing
-    5. Management
-Insight:
+   
+   - Nursing (hampir 600 lulusan)
+   - Social Service
+   - Journalism and Communication
+   - Veterinary Nursing
+   - Management
+
+**Temuan**:
+
 Meski memiliki dropout tinggi, Nursing tetap menghasilkan jumlah lulusan terbanyak, menunjukkan daya tarik jurusan ini kuat meskipun tingkat kesulitan juga tinggi.
 
-4. **Faktor yang Mempengaruhi Dropout**
+5. **Faktor yang Mempengaruhi Dropout**
 
 Variabel paling berpengaruh:
-  * Curricular Units Semester 2
 
-  * Curricular Units Semester 1
+   - Curricular Units Semester 2
 
-  * Tuition Fees Up to Date
+   - Curricular Units Semester 1
 
-  * Age at Enrollment
+   - Tuition Fees Up to Date
 
-  * Application Mode
+   - Age at Enrollment
 
-**Insight:**
+   - Application Mode
+
+**Temuan**:
 
   * Nilai akademik (semester 1 & 2) merupakan indikator paling besar terhadap dropout → mahasiswa dengan nilai rendah berisiko tinggi keluar.
 
@@ -114,9 +119,9 @@ Variabel paling berpengaruh:
 
   * Faktor demografis (usia saat masuk, jalur pendaftaran) berperan, meski lebih kecil.
 
-5. **Rata-Rata Nilai Akademik Berdasarkan Status**
+6. **Rata-Rata Nilai Akademik Berdasarkan Status**
 
-**Insight:**
+**Temuan**:
 
   * Lulusan memiliki nilai jauh lebih tinggi dibanding yang dropout.
 
@@ -142,10 +147,10 @@ Model machine learning (Random Forest Classifier) berhasil dikembangkan untuk me
 
 * Faktor Prediktif Utama: Analisis feature importance menunjukkan bahwa faktor akademik adalah prediktor terkuat. Fitur-fitur seperti:
 
-  1. 'Curricular_units_2nd_sem_approved' (Jumlah mata kuliah lulus di semester 2)
-  2. 'Curricular_units_1st_sem_approved' (Jumlah mata kuliah lulus di semester 1)
-  3. 'Curricular_units_2nd_sem_grade' (Rata-rata nilai semester 2)
-  4. 'Curricular_units_1st_sem_grade' (Rata-rata nilai semester 1)
+   - Curricular_units_2nd_sem_approved (Jumlah mata kuliah lulus di semester 2)
+   - Curricular_units_1st_sem_approved (Jumlah mata kuliah lulus di semester 1)
+   - Curricular_units_2nd_sem_grade (Rata-rata nilai semester 2)
+   - Curricular_units_1st_sem_grade (Rata-rata nilai semester 1)
 
 * Faktor finansial, seperti Tuition_fees_up_to_date (Status pembayaran UKT), juga terbukti menjadi prediktor penting.
 
