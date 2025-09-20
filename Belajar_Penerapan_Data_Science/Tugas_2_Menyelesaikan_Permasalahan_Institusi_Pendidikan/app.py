@@ -20,15 +20,15 @@ with col2:
     data['Debtor'] = [Debtor]
 
 with col3:
-    Tuition_fees_up_to_date = st.selectbox('Tuition fees up to date', encoder_Tuition_fees_up_to_date.classes_, index=None)
+    Tuition_fees_up_to_date = st.selectbox('Tuition fees up to date', encoder_Tuition_fees_up_to_date.classes_, index=1)
     data['Tuition_fees_up_to_date'] = [Tuition_fees_up_to_date]
 
 with col4:
-    Gender = st.selectbox('Gender', encoder_Gender.classes_, index=None)
+    Gender = st.selectbox('Gender', encoder_Gender.classes_, index=1)
     data['Gender'] = [Gender]
 
 with col5:
-    Scholarship_holder = st.selectbox('Scholarship holder', encoder_Scholarship_holder.classes_, index=None)
+    Scholarship_holder = st.selectbox('Scholarship holder', encoder_Scholarship_holder.classes_, index=1)
     data['Scholarship_holder'] = [Scholarship_holder]
 
 col1, col2, col3, col4, col5 = st.columns(5)
