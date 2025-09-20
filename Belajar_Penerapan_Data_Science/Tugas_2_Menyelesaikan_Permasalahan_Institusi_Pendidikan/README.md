@@ -42,24 +42,30 @@ Untuk memastikan proyek berjalan di lingkungan yang terisolasi, stabil, dan memi
 
 1. Klona (Clone) Repositori Proyek
 Buka terminal atau Command Prompt, kemudian jalankan perintah berikut untuk menginduh semua file dari repository.
-`git clone https://github.com/Andishafira/Dicoding.git`
+
+```git clone https://github.com/Andishafira/Dicoding.git```
 
 Setelah selesai, masuk ke direktori repositori yang baru saja diunduh:
 
-`cd Dicoding`
+```cd Dicoding```
 
 2. Membuat dan Mengaktifkan Virtual Environment (`venv`)
 
 Sangat disarankan untuk membuat virtual environment agar dependensi proyek (pustaka) tidak bercampur dengan instalasi Python global.
 
   * Dari dalam direktori Dicoding, buat environment baru (misalnya, dengan nama `venv`):
-    `python -m venv venv`
+
+    ```python -m venv venv```
 
   * Selanjutnya, aktifkan environment tersebut
     * Di Windows ;
-      `.\venv\Scripts\activate`
+
+       ```.\venv\Scripts\activate```
+      
     * Di macOS/Linux:
-      `source venv/bin/activate`
+      
+      ```source venv/bin/activate```
+      
 Setelah aktif, nama environment (`venv`) akan muncul di awal baris terminal.
 
 
@@ -67,7 +73,9 @@ Setelah aktif, nama environment (`venv`) akan muncul di awal baris terminal.
 
    
 Setelah virtual environment aktif, instal semua pustaka yang diperlukan yang sudah terdaftar dalam file `requirements.txt` menggunakan pip:
-`pip install -r requirements.txt`
+
+```pip install -r requirements.txt```
+
 Perintah ini akan secara otomatis mengunduh dan menginstal semua pustaka seperti streamlit, pandas, scikit-learn, dll., dengan versi yang tepat.
 
 Setelah ketiga langkah ini selesai, lingkungan telah siap. Anda dapat melanjutkan untuk menjalankan proses training di notebook atau langsung menjalankan aplikasi Streamlit.
