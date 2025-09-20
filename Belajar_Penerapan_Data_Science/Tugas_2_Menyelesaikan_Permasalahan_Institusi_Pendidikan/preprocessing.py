@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import joblib
 
-encoder_Application_mode = joblib.load(f"model/encoder_Application_mode.joblib")
+encoder_Application_mode = joblib.load("./Belajar_Penerapan_Data_Science/Tugas_2_Menyelesaikan_Permasalahan_Institusi_Pendidikan/model/encoder_Application_mode.joblib")
 encoder_Debtor = joblib.load("model/encoder_Debtor.joblib")
 encoder_Gender = joblib.load("model/encoder_Gender.joblib")
 encoder_Scholarship_holder = joblib.load("model/encoder_Scholarship_holder.joblib")
