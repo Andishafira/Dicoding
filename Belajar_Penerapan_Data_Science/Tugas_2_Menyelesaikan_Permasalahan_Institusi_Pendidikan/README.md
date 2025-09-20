@@ -6,7 +6,7 @@ Institusi pendidikan (disebut sebagai Jaya University dalam nama file) menghadap
 
 ### Latar Belakang Bisnis
 
-Institusi pendidikan (disebut sebagai Jaya University dalam nama file) menghadapi tantangan dalam mempertahankan mahasiswanya. Tingkat dropout yang tinggi tidak hanya berdampak pada finansial institusi tetapi juga pada reputasi akademisnya. Dengan memahami faktor-faktor kunci yang memengaruhi keberhasilan studi, institusi dapat secara proaktif mengidentifikasi mahasiswa yang berisiko dan memberikan intervensi yang tepat untuk mendukung mereka agar berhasil lulus.
+Institusi pendidikan Jaya Jaya University menghadapi tantangan dalam mempertahankan mahasiswanya. Tingkat dropout yang tinggi tidak hanya berdampak pada finansial institusi tetapi juga pada reputasi akademisnya. Dengan memahami faktor-faktor kunci yang memengaruhi keberhasilan studi, institusi dapat secara proaktif mengidentifikasi mahasiswa yang berisiko dan memberikan intervensi yang tepat untuk mendukung mereka agar berhasil lulus.
 
 ---
 
@@ -37,7 +37,7 @@ Cakupan proyek ini meliputi:
 Dataset diambil dari repositori GitHub dan dimuat ke dalam dataframe dengan sumber data: https://github.com/dicodingacademy/dicoding_dataset/tree/main/students_performance
 
 **Setup Environment :**
-Kebutuhan requirements untuk menjalankan program IPYNB tersedia dalam file requirements_ipynb.txt. Kemudian, untuk melakukan deployment, kebutuhan requirements tersedia dalam file requirements.txt.
+Kebutuhan requirements untuk menjalankan program IPYNB tersedia dalam file `requirements_ipynb.txt`. Kemudian, untuk melakukan deployment, kebutuhan requirements tersedia dalam file `requirements.txt.`
 
 ---
 
@@ -143,21 +143,20 @@ Variabel paling berpengaruh:
 ---
 ## Menjalankan Sistem Machine Learning
 
-Prototipe sistem machine learning ini telah di-deploy sebagai aplikasi web interaktif menggunakan Streamlit. Proses training model asli dilakukan dalam notebook Jupyter (Tugas_2_Jaya_University_fix.ipynb), yang kemudian menyimpan model terlatih dan scaler/encoder sebagai file .joblib.
+Prototipe sistem machine learning ini telah di-deploy sebagai aplikasi web interaktif menggunakan Streamlit. Proses training model asli dilakukan dalam notebook Jupyter (`Tugas_2_Jaya_University_fix.ipynb`), yang kemudian menyimpan model terlatih dan scaler/encoder sebagai file `.joblib`.
 
-Aplikasi Streamlit (app.py), dengan bantuan modul preprocessing.py dan prediction.py, kemudian memuat file-file ini untuk melakukan prediksi secara real-time berdasarkan input pengguna.
+Aplikasi Streamlit (`app.py`), dengan bantuan modul `preprocessing.py` dan `prediction.py`, kemudian memuat file-file ini untuk melakukan prediksi secara real-time berdasarkan input pengguna.
 
 **Cara Menjalankan Prototipe (Lokal):**
 
-1. Pastikan memiliki file app.py, preprocessing.py, prediction.py, dan semua file .joblib (model dan encoders/scalers) dalam satu direktori.
+1. Pastikan memiliki file ` app.py `, ` preprocessing.py `, ` prediction.py `, dan semua file ` .joblib ` (model dan encoders/scalers) dalam satu direktori.
 
-2. Instal semua pustaka yang diperlukan (termasuk streamlit) dari file requirements.txt.
+2. Instal semua pustaka yang diperlukan (termasuk streamlit) dari file ` requirements.txt. `
 
 3. Buka terminal atau command prompt, navigasi ke direktori tersebut, dan jalankan perintah:
 
-'''
-streamlit run app.py
-'''
+` streamlit run app.py `
+
 4. Aplikasi akan otomatis terbuka di browser Anda. Pengguna dapat memasukkan 10 fitur yang diperlukan di sidebar untuk mendapatkan prediksi status mahasiswa (Lulus atau Dropout).
 
 **Cara Menjalankan Prototipe (Online):**
@@ -174,10 +173,10 @@ Model machine learning (Random Forest Classifier) berhasil dikembangkan untuk me
 
 * Faktor Prediktif Utama: Analisis feature importance menunjukkan bahwa faktor akademik adalah prediktor terkuat. Fitur-fitur seperti:
 
-   - Curricular_units_2nd_sem_approved (Jumlah mata kuliah lulus di semester 2)
-   - Curricular_units_1st_sem_approved (Jumlah mata kuliah lulus di semester 1)
-   - Curricular_units_2nd_sem_grade (Rata-rata nilai semester 2)
-   - Curricular_units_1st_sem_grade (Rata-rata nilai semester 1)
+   - `Curricular_units_2nd_sem_approved` (Jumlah mata kuliah lulus di semester 2)
+   - `Curricular_units_1st_sem_approved` (Jumlah mata kuliah lulus di semester 1)
+   - `Curricular_units_2nd_sem_grade` (Rata-rata nilai semester 2)
+   - `Curricular_units_1st_sem_grade` (Rata-rata nilai semester 1)
 
 * Faktor finansial, seperti Tuition_fees_up_to_date (Status pembayaran UKT), juga terbukti menjadi prediktor penting.
 
